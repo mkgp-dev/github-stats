@@ -11,6 +11,7 @@ Automatically generate transparent GitHub stats SVG cards using a Node.js runtim
 ## Required secret
 
 - `ACCESS_TOKEN`: GitHub personal access token used for API access.
+- `GH_STATS_ACTOR`: GitHub login that owns the `ACCESS_TOKEN` PAT (used for `GITHUB_ACTOR`).
 
 ## Optional secrets
 

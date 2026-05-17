@@ -12,4 +12,7 @@ test('workflow runs node generator instead of python', async () => {
   assert.doesNotMatch(yaml, /setup-python/);
   assert.doesNotMatch(yaml, /pip install/);
   assert.doesNotMatch(yaml, /generate_images\.py/);
+
+  assert.match(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*secrets\.GH_STATS_ACTOR\s*\}\}/);
+  assert.doesNotMatch(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*github\.actor\s*\}\}/);
 });

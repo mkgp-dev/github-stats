@@ -28,7 +28,7 @@ jobs:
         npm run generate
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_ACTOR: ${{ secrets.GH_STATS_ACTOR }}
         REPO_SCOPE: ${{ secrets.REPO_SCOPE }}
         LANG_SCOPE: ${{ secrets.LANG_SCOPE }}
         ENABLE_LINES_CHANGED: ${{ secrets.ENABLE_LINES_CHANGED }}

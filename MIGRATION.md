@@ -23,6 +23,9 @@
 ## Notes
 
 - Workflow runtime is now Node.js (`actions/setup-node`, `npm ci`, `npm run generate`).
-- `GITHUB_ACTOR` comes from `${{ github.actor }}` in Actions.
+- `GITHUB_ACTOR` must be the PAT owner's GitHub login.
+- In Actions, wire `GITHUB_ACTOR` from a dedicated secret such as `GH_STATS_ACTOR`:
+  - `GITHUB_ACTOR: ${{ secrets.GH_STATS_ACTOR }}`
+- Do not wire `GITHUB_ACTOR` from `${{ github.actor }}`. Triggering user and PAT owner can differ and will fail token/actor preflight checks.
 - Views are always computed from owned repositories.
 - `lines_changed` remains optional and degrades as partial instead of failing the full run.
