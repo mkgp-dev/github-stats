@@ -2,6 +2,13 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+class BudgetExceededError extends Error {
+  constructor() {
+    super('lines_changed module budget exceeded');
+    this.name = 'BudgetExceededError';
+  }
+}
+
 async function withTimeout(promise, timeoutMs) {
   let timeout;
   const timeoutPromise = new Promise((_, reject) => {
@@ -14,23 +21,50 @@ async function withTimeout(promise, timeoutMs) {
   }
 }
 
-async function queryContributorStats(client, repo, maxRetries, timeoutMs) {
+async function queryContributorStats(client, repo, maxRetries, timeoutMs, now, deadline, sleep, logger) {
+  const remainingMs = () => deadline - now();
+
   for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+    if (remainingMs() <= 0) {
+      throw new BudgetExceededError();
+    }
+
     try {
+      const effectiveTimeoutMs = Math.max(1, Math.min(timeoutMs, remainingMs()));
       const data = await withTimeout(
         client.rest(`/repos/${repo}/stats/contributors`),
-        timeoutMs
+        effectiveTimeoutMs
       );
       if (Array.isArray(data)) return data;
+      logger.warn(`[WARN] lines_changed skipped ${repo} due to non-array contributors response`);
+      return [];
     } catch (err) {
+      if (err instanceof BudgetExceededError) throw err;
       if (attempt === maxRetries) throw err;
     }
-    await delay(Math.min(500 * 2 ** attempt, 5000));
+
+    if (remainingMs() <= 0) {
+      throw new BudgetExceededError();
+    }
+
+    const backoffMs = Math.min(500 * 2 ** attempt, 5000, remainingMs());
+    if (backoffMs <= 0) {
+      throw new BudgetExceededError();
+    }
+    await sleep(backoffMs);
   }
   return [];
 }
 
-export async function collectLinesChanged({ client, repos, username, config, now = Date.now, logger = console }) {
+export async function collectLinesChanged({
+  client,
+  repos,
+  username,
+  config,
+  now = Date.now,
+  logger = console,
+  sleep = delay
+}) {
   const start = now();
   const deadline = start + config.linesChangedModuleBudgetMs;
   const scoped = repos.slice(0, config.linesChangedMaxRepos);
@@ -51,9 +85,17 @@ export async function collectLinesChanged({ client, repos, username, config, now
         client,
         repo,
         config.linesChangedMaxRetries,
-        config.linesChangedTimeoutMs
+        config.linesChangedTimeoutMs,
+        now,
+        deadline,
+        sleep,
+        logger
       );
-    } catch {
+    } catch (err) {
+      if (err instanceof BudgetExceededError) {
+        isPartial = true;
+        break;
+      }
       logger.warn(`[WARN] lines_changed skipped ${repo} after retries`);
       continue;
     }
