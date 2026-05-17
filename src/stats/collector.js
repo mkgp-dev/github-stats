@@ -87,6 +87,19 @@ function computeLanguageProps(languages) {
   return languages;
 }
 
+function mergeUniqueRepos(primaryRepos, secondaryRepos) {
+  const merged = new Map();
+  for (const repo of primaryRepos) {
+    merged.set(repo.nameWithOwner, repo);
+  }
+  for (const repo of secondaryRepos) {
+    if (!merged.has(repo.nameWithOwner)) {
+      merged.set(repo.nameWithOwner, repo);
+    }
+  }
+  return [...merged.values()];
+}
+
 export async function collectCoreStats(client, config) {
   const ownedRepos = new Map();
   const contributedRepos = new Map();
@@ -135,12 +148,12 @@ export async function collectCoreStats(client, config) {
 
   const metricRepos =
     config.repoScope === 'owned_plus_contributed'
-      ? [...ownedRepos.values(), ...contributedRepos.values()]
+      ? mergeUniqueRepos(ownedRepos.values(), contributedRepos.values())
       : [...ownedRepos.values()];
 
   const langRepos =
     config.langScope === 'owned_plus_contributed'
-      ? [...ownedRepos.values(), ...contributedRepos.values()]
+      ? mergeUniqueRepos(ownedRepos.values(), contributedRepos.values())
       : [...ownedRepos.values()];
 
   let stars = 0;

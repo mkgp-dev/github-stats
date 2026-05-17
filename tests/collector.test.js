@@ -213,3 +213,74 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
   assert.equal(stats.views, 8);
   assert.equal(stats.contributions, 3);
 });
+
+test('dedupes overlap between owned and contributed repos for metrics and languages', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      if (query.includes('contributionsCollection(from:')) {
+        throw new Error('unexpected per-year query when years are empty');
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 10 },
+                  forkCount: 4,
+                  languages: { edges: [{ size: 100, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                },
+                {
+                  nameWithOwner: 'mkgp/owned-only',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 1,
+                  languages: { edges: [{ size: 50, node: { name: 'TypeScript', color: '#3178c6' } }] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 999 },
+                  forkCount: 999,
+                  languages: { edges: [{ size: 999, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                },
+                {
+                  nameWithOwner: 'other/contrib-only',
+                  stargazers: { totalCount: 2 },
+                  forkCount: 3,
+                  languages: { edges: [{ size: 25, node: { name: 'Go', color: '#00add8' } }] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [{ count: 1 }] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.repoCount, 3);
+  assert.equal(stats.stars, 13);
+  assert.equal(stats.forks, 8);
+  assert.equal(stats.languages.JavaScript.size, 100);
+  assert.equal(stats.languages.TypeScript.size, 50);
+  assert.equal(stats.languages.Go.size, 25);
+});
