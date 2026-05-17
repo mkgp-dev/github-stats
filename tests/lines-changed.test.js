@@ -119,3 +119,31 @@ test('stops at module budget and marks partial', async () => {
   assert.equal(result.deletions, 0);
   assert.equal(calls, 0);
 });
+
+test('marks partial when contributor stats remains pending/non-array', async () => {
+  let calls = 0;
+  const client = {
+    rest: async () => {
+      calls += 1;
+      return { message: 'accepted' };
+    }
+  };
+
+  const result = await collectLinesChanged({
+    client,
+    repos: ['a/x'],
+    username: 'mkgp',
+    config: {
+      linesChangedMaxRepos: 30,
+      linesChangedTimeoutMs: 100,
+      linesChangedModuleBudgetMs: 10_000,
+      linesChangedMaxRetries: 2
+    },
+    sleep: async () => {}
+  });
+
+  assert.equal(result.isPartial, true);
+  assert.equal(result.additions, 0);
+  assert.equal(result.deletions, 0);
+  assert.equal(calls, 1);
+});

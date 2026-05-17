@@ -112,3 +112,29 @@ test('uses retry-after HTTP-date delay path', async () => {
   assert.equal(Number.isFinite(sleepCalls[0]), true);
   assert.equal(sleepCalls[0] >= 0, true);
 });
+
+test('graphql throws when response body contains errors', async () => {
+  const client = createGitHubClient({
+    token: 'abc',
+    timeoutMs: 1000,
+    maxRetries: 0,
+    maxConcurrency: 2,
+    fetchImpl: async () =>
+      new Response(
+        JSON.stringify({
+          data: null,
+          errors: [{ message: 'Something broke' }]
+        }),
+        { status: 200 }
+      )
+  });
+
+  await assert.rejects(
+    () => client.graphql('query { viewer { login } }'),
+    (err) =>
+      err &&
+      err.name === 'GitHubGraphQLError' &&
+      err.status === 200 &&
+      /Something broke/.test(err.message)
+  );
+});

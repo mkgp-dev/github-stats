@@ -48,6 +48,19 @@ function isTransientError(err) {
   return false;
 }
 
+function toGraphqlBodyError(status, body) {
+  const firstMessage =
+    Array.isArray(body?.errors) && body.errors.length > 0
+      ? (body.errors[0]?.message ?? 'unknown graphql error')
+      : 'unknown graphql error';
+  const err = new Error(`GitHub GraphQL error (status ${status}): ${firstMessage}`);
+  err.name = 'GitHubGraphQLError';
+  err.status = status;
+  err.graphqlErrors = Array.isArray(body?.errors) ? body.errors : [];
+  err.responseBody = body;
+  return err;
+}
+
 export function createGitHubClient({
   token,
   timeoutMs,
@@ -104,6 +117,11 @@ export function createGitHubClient({
 
     if (!resp.ok) {
       throw new Error(`GitHub API failed with status ${resp.status}`);
+    }
+
+    const isGraphqlRequest = typeof url === 'string' && /\/graphql$/.test(url);
+    if (isGraphqlRequest && Array.isArray(body?.errors) && body.errors.length > 0) {
+      throw toGraphqlBodyError(resp.status, body);
     }
 
     return body;

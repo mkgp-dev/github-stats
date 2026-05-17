@@ -35,9 +35,11 @@ async function queryContributorStats(client, repo, maxRetries, timeoutMs, now, d
         client.rest(`/repos/${repo}/stats/contributors`),
         effectiveTimeoutMs
       );
-      if (Array.isArray(data)) return data;
+      if (Array.isArray(data)) {
+        return { rows: data, pending: false };
+      }
       logger.warn(`[WARN] lines_changed skipped ${repo} due to non-array contributors response`);
-      return [];
+      return { rows: [], pending: true };
     } catch (err) {
       if (err instanceof BudgetExceededError) throw err;
       if (attempt === maxRetries) throw err;
@@ -53,7 +55,7 @@ async function queryContributorStats(client, repo, maxRetries, timeoutMs, now, d
     }
     await sleep(backoffMs);
   }
-  return [];
+  return { rows: [], pending: true };
 }
 
 export async function collectLinesChanged({
@@ -81,7 +83,7 @@ export async function collectLinesChanged({
 
     let rows = [];
     try {
-      rows = await queryContributorStats(
+      const stats = await queryContributorStats(
         client,
         repo,
         config.linesChangedMaxRetries,
@@ -91,6 +93,10 @@ export async function collectLinesChanged({
         sleep,
         logger
       );
+      rows = stats.rows;
+      if (stats.pending) {
+        isPartial = true;
+      }
     } catch (err) {
       if (err instanceof BudgetExceededError) {
         isPartial = true;
