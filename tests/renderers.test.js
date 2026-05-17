@@ -3,13 +3,14 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { atomicWrite } from '../src/io/atomicWrite.js';
 import { renderOverview } from '../src/render/overview.js';
 import { renderLanguages } from '../src/render/languages.js';
 
 test('renderers write both files and resolve placeholders', async () => {
   const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
   const stats = {
-    name: 'MK',
+    name: 'A&B <MK>',
     stars: 10,
     forks: 3,
     contributions: 7,
@@ -29,5 +30,20 @@ test('renderers write both files and resolve placeholders', async () => {
 
   assert.equal(overview.includes('{{'), false);
   assert.equal(languages.includes('{{'), false);
+  assert.match(overview, /A&amp;B &lt;MK&gt;/);
   assert.match(languages, /A&amp;B/);
+});
+
+test('atomicWrite supports concurrent writes to same target', async () => {
+  const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
+  const filePath = join(outDir, 'overview.svg');
+
+  await Promise.all([
+    atomicWrite(filePath, 'one'),
+    atomicWrite(filePath, 'two'),
+    atomicWrite(filePath, 'three')
+  ]);
+
+  const finalContent = await readFile(filePath, 'utf8');
+  assert.ok(['one', 'two', 'three'].includes(finalContent));
 });

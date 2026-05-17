@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { atomicWrite } from '../io/atomicWrite.js';
+import { escapeHtml } from '../shared/escapeHtml.js';
 
 function formatNumber(value) {
   return Number(value ?? 0).toLocaleString('en-US');
@@ -11,7 +12,7 @@ export async function renderOverview({ stats, templatePath, outputDir }) {
   const changed = (stats.linesChanged?.additions ?? 0) + (stats.linesChanged?.deletions ?? 0);
 
   const output = template
-    .replaceAll('{{ name }}', stats.name)
+    .replaceAll('{{ name }}', escapeHtml(stats.name))
     .replaceAll('{{ stars }}', formatNumber(stats.stars))
     .replaceAll('{{ forks }}', formatNumber(stats.forks))
     .replaceAll('{{ contributions }}', formatNumber(stats.contributions))
