@@ -1,4 +1,4 @@
-# Migration Guide: Python v1 to JavaScript v2
+# Migration Guide: Python to JavaScript
 
 ## Breaking change
 
