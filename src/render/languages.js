@@ -26,7 +26,7 @@ export async function renderLanguages({ stats, templatePath, outputDir }) {
       `<span style="background-color: ${color};width: ${(ratio[0] * data.prop).toFixed(3)}%;margin-right: ${(ratio[1] * data.prop).toFixed(3)}%;" class="progress-item"></span>`
     );
     languageItems.push(
-      `<li style="animation-delay: ${index * 150}ms;"><span class="lang">${escapeHtml(lang)}</span><span class="percent">${data.prop.toFixed(2)}%</span></li>`
+      `<li style="animation-delay: ${index * 150}ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:${color};" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"></path></svg><span class="lang">${escapeHtml(lang)}</span><span class="percent">${data.prop.toFixed(2)}%</span></li>`
     );
   }
 

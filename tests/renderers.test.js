@@ -32,6 +32,8 @@ test('renderers write both files and resolve placeholders', async () => {
   assert.equal(languages.includes('{{'), false);
   assert.match(overview, /A&amp;B &lt;MK&gt;/);
   assert.match(languages, /A&amp;B/);
+  assert.match(languages, /class="octicon" style="fill:#000000;"/);
+  assert.match(languages, /<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"><\/path>/);
 });
 
 test('atomicWrite supports concurrent writes to same target', async () => {
