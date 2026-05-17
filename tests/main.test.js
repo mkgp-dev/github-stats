@@ -117,7 +117,12 @@ test('run collects lines changed only when enabled and passes owned_plus_contrib
       return { additions: 5, deletions: 2, isPartial: false };
     },
     renderOverview: async ({ stats }) => {
-      calls.push(['overview', stats.linesChanged]);
+      calls.push([
+        'overview',
+        stats.linesChanged,
+        stats.activityMetricLabel,
+        stats.activityMetricValue
+      ]);
     },
     renderLanguages: async () => {
       calls.push(['languages']);
@@ -127,23 +132,45 @@ test('run collects lines changed only when enabled and passes owned_plus_contrib
   await run(deps);
 
   assert.deepEqual(calls[0], ['lines', ['mkgp/owned', 'other/contrib'], 'mkgp']);
-  assert.deepEqual(calls[1], ['overview', { additions: 5, deletions: 2, isPartial: false }]);
+  assert.deepEqual(calls[1], [
+    'overview',
+    { additions: 5, deletions: 2, isPartial: false },
+    'Lines of code changed',
+    7
+  ]);
 });
 
 test('run sets zero lines changed when disabled', async () => {
-  let captured;
+  let capturedLinesChanged;
+  let capturedMetricLabel;
+  let capturedMetricValue;
+  let capturedMetricIcon;
   const deps = {
     loadConfig: () => baseConfig({ enableLinesChanged: false }),
     createClient: () => ({
-      graphql: async () => ({ data: { viewer: { login: 'mkgp' } } })
+      graphql: async (query) => {
+        if (query.includes('viewer { login }')) {
+          return { data: { viewer: { login: 'mkgp' } } };
+        }
+        if (query.includes('is:pr is:merged')) {
+          return { data: { search: { issueCount: 42 } } };
+        }
+        return {};
+      }
     }),
     collectCoreStats: async () => baseStats({ linesChanged: null }),
     renderOverview: async ({ stats }) => {
-      captured = stats.linesChanged;
+      capturedLinesChanged = stats.linesChanged;
+      capturedMetricLabel = stats.activityMetricLabel;
+      capturedMetricValue = stats.activityMetricValue;
+      capturedMetricIcon = stats.activityMetricIcon;
     },
     renderLanguages: async () => {}
   };
 
   await run(deps);
-  assert.deepEqual(captured, { additions: 0, deletions: 0, isPartial: false });
+  assert.deepEqual(capturedLinesChanged, { additions: 0, deletions: 0, isPartial: false });
+  assert.equal(capturedMetricLabel, 'Merged pull requests');
+  assert.equal(capturedMetricValue, 42);
+  assert.match(capturedMetricIcon, /class="octicon"/);
 });

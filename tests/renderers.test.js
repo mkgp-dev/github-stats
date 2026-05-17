@@ -60,6 +60,9 @@ test('overview renders lines changed as 0 when disabled', async () => {
     views: 20,
     repoCount: 2,
     linesChanged: { additions: 0, deletions: 0, isPartial: false },
+    activityMetricIcon: '<svg class="octicon" xmlns="http://www.w3.org/2000/svg"></svg>',
+    activityMetricLabel: 'Merged pull requests',
+    activityMetricValue: 12,
     languages: {
       JavaScript: { size: 100, occurrences: 1, color: '#f1e05a', prop: 100 }
     }
@@ -68,5 +71,5 @@ test('overview renders lines changed as 0 when disabled', async () => {
   await renderOverview({ stats, templatePath: 'templates/overview.svg', outputDir: outDir });
   const overview = await readFile(join(outDir, 'overview.svg'), 'utf8');
 
-  assert.match(overview, /Lines of code changed<\/td><td>0<\/td>/);
+  assert.match(overview, /<svg class="octicon" xmlns="http:\/\/www\.w3\.org\/2000\/svg"><\/svg>Merged pull requests<\/td><td>12<\/td>/);
 });
