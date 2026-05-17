@@ -34,4 +34,39 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
 test('loadConfig uses default linesChangedMaxRepos when unset', () => {
   const cfg = loadConfig({ ACCESS_TOKEN: 'abc', GITHUB_ACTOR: 'mkgp' });
   assert.equal(cfg.linesChangedMaxRepos, 30);
+  assert.equal(cfg.requestTimeoutMs, 15000);
+  assert.equal(cfg.maxConcurrency, 10);
+  assert.equal(cfg.maxRetries, 5);
+});
+
+test('loadConfig rejects malformed integer env strings', () => {
+  assert.throws(
+    () =>
+      loadConfig({
+        ACCESS_TOKEN: 'abc',
+        GITHUB_ACTOR: 'mkgp',
+        LINES_CHANGED_MAX_REPOS: '12abc'
+      }),
+    /LINES_CHANGED_MAX_REPOS/
+  );
+
+  assert.throws(
+    () =>
+      loadConfig({
+        ACCESS_TOKEN: 'abc',
+        GITHUB_ACTOR: 'mkgp',
+        MAX_CONCURRENCY: '1.5'
+      }),
+    /MAX_CONCURRENCY/
+  );
+
+  assert.throws(
+    () =>
+      loadConfig({
+        ACCESS_TOKEN: 'abc',
+        GITHUB_ACTOR: 'mkgp',
+        MAX_RETRIES: '1e3'
+      }),
+    /MAX_RETRIES/
+  );
 });
