@@ -29,7 +29,9 @@ export async function run(deps = {}) {
 
   const loginData = await client.graphql(LOGIN_QUERY);
   const tokenLogin = loginData?.data?.viewer?.login;
-  if (tokenLogin !== config.githubActor) {
+  const normalizedTokenLogin = String(tokenLogin ?? '').toLowerCase();
+  const normalizedActor = String(config.githubActor ?? '').toLowerCase();
+  if (normalizedTokenLogin !== normalizedActor) {
     throw new Error(`Token login mismatch: expected ${config.githubActor}, got ${tokenLogin}`);
   }
 
