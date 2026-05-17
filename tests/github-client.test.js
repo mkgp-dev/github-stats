@@ -102,7 +102,10 @@ test('enforces maxConcurrency for in-flight requests', async () => {
     client.rest('/repos/a/4/traffic/views')
   ];
 
-  await Promise.resolve();
+  // Wait briefly for the first wave to acquire permits, without relying on one microtask tick.
+  for (let i = 0; i < 20 && maxInFlight < 2; i += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 1));
+  }
   assert.equal(maxInFlight <= 2, true);
   releaseGate();
 
