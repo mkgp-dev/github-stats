@@ -100,6 +100,16 @@ function mergeUniqueRepos(primaryRepos, secondaryRepos) {
   return [...merged.values()];
 }
 
+function mergeUniqueNames(primaryNames, secondaryNames) {
+  const merged = new Set(primaryNames);
+  for (const name of secondaryNames) {
+    if (!merged.has(name)) {
+      merged.add(name);
+    }
+  }
+  return [...merged];
+}
+
 export async function collectCoreStats(client, config) {
   const ownedRepos = new Map();
   const contributedRepos = new Map();
@@ -201,7 +211,7 @@ export async function collectCoreStats(client, config) {
     contributedRepoNames: [...contributedRepos.keys()],
     repoNamesForLines:
       config.repoScope === 'owned_plus_contributed'
-        ? [...ownedRepos.keys(), ...contributedRepos.keys()]
+        ? mergeUniqueNames(ownedRepos.keys(), contributedRepos.keys())
         : [...ownedRepos.keys()]
   };
 }

@@ -357,3 +357,69 @@ test('language fallback/percent contract and deterministic repo name sets', asyn
   assert.deepEqual(stats.contributedRepoNames, ['other/z-contrib']);
   assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/b-owned', 'other/z-contrib']);
 });
+
+test('repoNamesForLines dedupes overlaps with deterministic owned-first order', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/a-owned',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                },
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 999 },
+                  forkCount: 999,
+                  languages: { edges: [] }
+                },
+                {
+                  nameWithOwner: 'other/z-contrib',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/shared']);
+  assert.deepEqual(stats.contributedRepoNames, ['mkgp/shared', 'other/z-contrib']);
+  assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/shared', 'other/z-contrib']);
+});
