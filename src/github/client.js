@@ -22,22 +22,66 @@ function computeBackoff(attempt) {
   return Math.min(base * 2 ** attempt + jitter, cap);
 }
 
-export function createGitHubClient({ token, timeoutMs, maxRetries, maxConcurrency, fetchImpl = fetch }) {
+function parseRetryAfterMs(rawValue, nowMs) {
+  if (typeof rawValue !== 'string') return null;
+
+  const trimmed = rawValue.trim();
+  if (!trimmed) return null;
+
+  const seconds = Number.parseInt(trimmed, 10);
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return seconds * 1000;
+  }
+
+  const targetTime = Date.parse(trimmed);
+  if (!Number.isNaN(targetTime)) {
+    return Math.max(0, targetTime - nowMs);
+  }
+
+  return null;
+}
+
+function isTransientError(err) {
+  if (!err || typeof err !== 'object') return false;
+  if (err.name === 'AbortError') return true;
+  if (err instanceof TypeError) return true;
+  return false;
+}
+
+export function createGitHubClient({
+  token,
+  timeoutMs,
+  maxRetries,
+  maxConcurrency,
+  fetchImpl = fetch,
+  sleepImpl = sleep,
+  backoffImpl = computeBackoff,
+  nowImpl = () => Date.now()
+}) {
   const sem = new AsyncSemaphore(maxConcurrency);
 
   async function request(url, init, attempt = 0) {
-    const result = await sem.withPermit(async () => {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), timeoutMs);
-      try {
-        const resp = await fetchImpl(url, { ...init, signal: controller.signal });
-        const bodyText = await resp.text();
-        const body = parseJsonSafe(bodyText);
-        return { resp, body };
-      } finally {
-        clearTimeout(timeout);
+    let result;
+    try {
+      result = await sem.withPermit(async () => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const resp = await fetchImpl(url, { ...init, signal: controller.signal });
+          const bodyText = await resp.text();
+          const body = parseJsonSafe(bodyText);
+          return { resp, body };
+        } finally {
+          clearTimeout(timeout);
+        }
+      });
+    } catch (err) {
+      if (isTransientError(err) && attempt < maxRetries) {
+        await sleepImpl(backoffImpl(attempt));
+        return request(url, init, attempt + 1);
       }
-    });
+      throw err;
+    }
 
     const { resp, body } = result;
 
@@ -52,9 +96,9 @@ export function createGitHubClient({ token, timeoutMs, maxRetries, maxConcurrenc
 
     const retryable = RETRYABLE.has(resp.status) || secondaryLimit;
     if (retryable && attempt < maxRetries) {
-      const retryAfter = Number.parseInt(resp.headers.get('retry-after') ?? '', 10);
-      const delay = Number.isFinite(retryAfter) ? retryAfter * 1000 : computeBackoff(attempt);
-      await sleep(Math.max(delay, secondaryLimit ? 60000 : 0));
+      const retryAfterMs = parseRetryAfterMs(resp.headers.get('retry-after'), nowImpl());
+      const delay = retryAfterMs ?? backoffImpl(attempt);
+      await sleepImpl(Math.max(delay, secondaryLimit ? 60000 : 0));
       return request(url, init, attempt + 1);
     }
 
@@ -84,3 +128,8 @@ export function createGitHubClient({ token, timeoutMs, maxRetries, maxConcurrenc
       })
   };
 }
+
+export const __testables = {
+  parseRetryAfterMs,
+  isTransientError
+};

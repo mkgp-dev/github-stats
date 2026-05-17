@@ -1,5 +1,9 @@
 export class AsyncSemaphore {
   constructor(limit) {
+    if (!Number.isInteger(limit) || limit <= 0) {
+      throw new Error('AsyncSemaphore limit must be a positive integer');
+    }
+
     this.limit = limit;
     this.inUse = 0;
     this.queue = [];
