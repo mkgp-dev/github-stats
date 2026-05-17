@@ -11,7 +11,7 @@ function requireString(env, key) {
 function parseBool(env, key, fallback) {
   const raw = env[key];
   if (raw == null || raw === '') return fallback;
-  const norm = String(raw).toLowerCase();
+  const norm = String(raw).trim().toLowerCase();
   if (norm === 'true') return true;
   if (norm === 'false') return false;
   throw new Error(`${key} must be true or false`);
@@ -20,7 +20,11 @@ function parseBool(env, key, fallback) {
 function parseIntValue(env, key, fallback, min = 1, max = Number.MAX_SAFE_INTEGER) {
   const raw = env[key];
   if (raw == null || raw === '') return fallback;
-  const value = Number.parseInt(String(raw), 10);
+  const normalized = String(raw).trim();
+  if (!/^[+-]?\d+$/.test(normalized)) {
+    throw new Error(`${key} must be an integer between ${min} and ${max}`);
+  }
+  const value = Number.parseInt(normalized, 10);
   if (!Number.isInteger(value) || value < min || value > max) {
     throw new Error(`${key} must be an integer between ${min} and ${max}`);
   }

@@ -16,7 +16,7 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
     {
       ACCESS_TOKEN: 'abc',
       GITHUB_ACTOR: 'mkgp',
-      ENABLE_LINES_CHANGED: 'true',
+      ENABLE_LINES_CHANGED: ' true ',
       LINES_CHANGED_MAX_REPOS: '42',
       COUNT_STATS_FROM_FORKS: '1'
     },
@@ -29,4 +29,9 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
   assert.equal(cfg.linesChangedMaxRepos, 42);
   assert.equal(cfg.requestTimeoutMs, 15000);
   assert.equal(warnings.length, 1);
+});
+
+test('loadConfig uses default linesChangedMaxRepos when unset', () => {
+  const cfg = loadConfig({ ACCESS_TOKEN: 'abc', GITHUB_ACTOR: 'mkgp' });
+  assert.equal(cfg.linesChangedMaxRepos, 30);
 });
