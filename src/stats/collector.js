@@ -196,6 +196,12 @@ export async function collectCoreStats(client, config) {
     contributions,
     views,
     languages,
-    linesChanged: null
+    linesChanged: null,
+    ownedRepoNames: [...ownedRepos.keys()],
+    contributedRepoNames: [...contributedRepos.keys()],
+    repoNamesForLines:
+      config.repoScope === 'owned_plus_contributed'
+        ? [...ownedRepos.keys(), ...contributedRepos.keys()]
+        : [...ownedRepos.keys()]
   };
 }

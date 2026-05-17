@@ -68,6 +68,23 @@ test('run throws when token login mismatches configured actor', async () => {
   await assert.rejects(() => run(deps), /Token login mismatch/);
 });
 
+test('run rejects before collection when actor/token login mismatches', async () => {
+  let collectCalled = false;
+  const deps = {
+    loadConfig: () => baseConfig({ githubActor: 'mkgp' }),
+    createClient: () => ({
+      graphql: async () => ({ data: { viewer: { login: 'other-user' } } })
+    }),
+    collectCoreStats: async () => {
+      collectCalled = true;
+      return baseStats();
+    }
+  };
+
+  await assert.rejects(() => run(deps), /Token login mismatch/);
+  assert.equal(collectCalled, false);
+});
+
 test('run treats token login match as case-insensitive', async () => {
   let collected = false;
   const deps = {

@@ -284,3 +284,76 @@ test('dedupes overlap between owned and contributed repos for metrics and langua
   assert.equal(stats.languages.TypeScript.size, 50);
   assert.equal(stats.languages.Go.size, 25);
 });
+
+test('language fallback/percent contract and deterministic repo name sets', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/a-owned',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 1,
+                  languages: {
+                    edges: [
+                      { size: 60, node: { name: 'Go', color: null } },
+                      { size: 40, node: { name: 'JavaScript', color: '#f1e05a' } }
+                    ]
+                  }
+                },
+                {
+                  nameWithOwner: 'mkgp/b-owned',
+                  stargazers: { totalCount: 2 },
+                  forkCount: 1,
+                  languages: {
+                    edges: [{ size: 20, node: { name: 'TypeScript', color: '#3178c6' } }]
+                  }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'other/z-contrib',
+                  stargazers: { totalCount: 3 },
+                  forkCount: 2,
+                  languages: {
+                    edges: [{ size: 10, node: { name: 'Rust', color: '#dea584' } }]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [{ count: 0 }] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.languages.Go.color, '#000000');
+  const propSum = Object.values(stats.languages).reduce((sum, lang) => sum + lang.prop, 0);
+  assert.ok(propSum > 99.99 && propSum < 100.01);
+
+  assert.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/b-owned']);
+  assert.deepEqual(stats.contributedRepoNames, ['other/z-contrib']);
+  assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/b-owned', 'other/z-contrib']);
+});

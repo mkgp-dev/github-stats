@@ -47,3 +47,24 @@ test('atomicWrite supports concurrent writes to same target', async () => {
   const finalContent = await readFile(filePath, 'utf8');
   assert.ok(['one', 'two', 'three'].includes(finalContent));
 });
+
+test('overview renders lines changed as 0 when disabled', async () => {
+  const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
+  const stats = {
+    name: 'MK',
+    stars: 10,
+    forks: 3,
+    contributions: 7,
+    views: 20,
+    repoCount: 2,
+    linesChanged: { additions: 0, deletions: 0, isPartial: false },
+    languages: {
+      JavaScript: { size: 100, occurrences: 1, color: '#f1e05a', prop: 100 }
+    }
+  };
+
+  await renderOverview({ stats, templatePath: 'templates/overview.svg', outputDir: outDir });
+  const overview = await readFile(join(outDir, 'overview.svg'), 'utf8');
+
+  assert.match(overview, /Lines of code changed<\/td><td>0<\/td>/);
+});
