@@ -67,16 +67,18 @@ export async function collectLinesChanged({
   logger = console,
   sleep = delay
 }) {
+  const MIN_ATTEMPT_WINDOW_MS = 1;
   const start = now();
   const deadline = start + config.linesChangedModuleBudgetMs;
   const scoped = repos.slice(0, config.linesChangedMaxRepos);
+  const hasNoTimeRemaining = () => now() + MIN_ATTEMPT_WINDOW_MS >= deadline;
 
   let additions = 0;
   let deletions = 0;
   let isPartial = false;
 
   for (const repo of scoped) {
-    if (now() + 1 >= deadline) {
+    if (hasNoTimeRemaining()) {
       isPartial = true;
       break;
     }
@@ -103,6 +105,7 @@ export async function collectLinesChanged({
         break;
       }
       logger.warn(`[WARN] lines_changed skipped ${repo} after retries`);
+      isPartial = true;
       continue;
     }
 

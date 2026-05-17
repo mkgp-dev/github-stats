@@ -28,14 +28,17 @@ function parseRetryAfterMs(rawValue, nowMs) {
   const trimmed = rawValue.trim();
   if (!trimmed) return null;
 
-  const seconds = Number.parseInt(trimmed, 10);
-  if (Number.isFinite(seconds) && seconds >= 0) {
+  if (/^\d+$/.test(trimmed)) {
+    const seconds = Number.parseInt(trimmed, 10);
     return seconds * 1000;
   }
 
-  const targetTime = Date.parse(trimmed);
-  if (!Number.isNaN(targetTime)) {
-    return Math.max(0, targetTime - nowMs);
+  // Guard against numeric-like values (e.g. "1.5") being parsed as dates.
+  if (/[a-zA-Z]/.test(trimmed)) {
+    const targetTime = Date.parse(trimmed);
+    if (!Number.isNaN(targetTime)) {
+      return Math.max(0, targetTime - nowMs);
+    }
   }
 
   return null;

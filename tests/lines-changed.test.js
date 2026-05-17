@@ -85,7 +85,7 @@ test('skip path emits warning after retries', async () => {
     sleep: async () => {}
   });
 
-  assert.equal(result.isPartial, false);
+  assert.equal(result.isPartial, true);
   assert.equal(result.additions, 0);
   assert.equal(result.deletions, 0);
   assert.equal(warnings.length, 1);

@@ -156,12 +156,13 @@ export async function collectCoreStats(client, config) {
       ? mergeUniqueRepos(ownedRepos.values(), contributedRepos.values())
       : [...ownedRepos.values()];
 
-  let stars = 0;
-  let forks = 0;
-  for (const repo of metricRepos) {
-    stars += repo.stargazers?.totalCount ?? 0;
-    forks += repo.forkCount ?? 0;
-  }
+  const { stars, forks } = metricRepos.reduce(
+    (totals, repo) => ({
+      stars: totals.stars + (repo.stargazers?.totalCount ?? 0),
+      forks: totals.forks + (repo.forkCount ?? 0)
+    }),
+    { stars: 0, forks: 0 }
+  );
 
   const languages = {};
   for (const repo of langRepos) {
@@ -180,9 +181,10 @@ export async function collectCoreStats(client, config) {
   let contributions = 0;
   if (years.length > 0) {
     const yearData = (await client.graphql(contribByYearQuery(years)))?.data?.viewer ?? {};
-    for (const key of Object.keys(yearData)) {
-      contributions += yearData[key]?.contributionCalendar?.totalContributions ?? 0;
-    }
+    contributions = Object.values(yearData).reduce(
+      (sum, entry) => sum + (entry?.contributionCalendar?.totalContributions ?? 0),
+      0
+    );
   }
 
   return {
