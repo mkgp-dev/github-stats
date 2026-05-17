@@ -71,3 +71,145 @@ test('views always use owned repos even when REPO_SCOPE is owned_plus_contribute
   assert.match(restCalls[0], /mkgp\/owned/);
   assert.equal(stats.stars, 5002);
 });
+
+test('empty contributionYears skips contrib-by-year query and keeps contributions at 0', async () => {
+  const graphqlCalls = [];
+
+  const client = {
+    graphql: async (query) => {
+      graphqlCalls.push(query);
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      if (query.includes('contributionsCollection(from:')) {
+        throw new Error('should not query contributionsCollection by year when years is empty');
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: []
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: []
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.contributions, 0);
+  assert.equal(graphqlCalls.some((q) => q.includes('contributionsCollection(from:')), false);
+});
+
+test('asymmetric pagination skips completed side and still aggregates correctly', async () => {
+  const graphqlCalls = [];
+  let page = 0;
+
+  const client = {
+    graphql: async (query) => {
+      graphqlCalls.push(query);
+
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [2025] } } } };
+      }
+      if (query.includes('year2025')) {
+        return {
+          data: {
+            viewer: {
+              year2025: { contributionCalendar: { totalContributions: 3 } }
+            }
+          }
+        };
+      }
+
+      page += 1;
+      if (page === 1) {
+        return {
+          data: {
+            viewer: {
+              login: 'mkgp',
+              name: 'MK',
+              repositories: {
+                pageInfo: { hasNextPage: false, endCursor: null },
+                nodes: [
+                  {
+                    nameWithOwner: 'mkgp/owned1',
+                    stargazers: { totalCount: 1 },
+                    forkCount: 1,
+                    languages: { edges: [{ size: 20, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                  }
+                ]
+              },
+              repositoriesContributedTo: {
+                pageInfo: { hasNextPage: true, endCursor: 'c1' },
+                nodes: [
+                  {
+                    nameWithOwner: 'other/contrib1',
+                    stargazers: { totalCount: 2 },
+                    forkCount: 2,
+                    languages: { edges: [{ size: 10, node: { name: 'Go', color: null } }] }
+                  }
+                ]
+              }
+            }
+          }
+        };
+      }
+
+      assert.equal(query.includes('repositoriesContributedTo('), true);
+      assert.equal(query.includes('repositories(first: 100, isFork: false'), false);
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'other/contrib2',
+                  stargazers: { totalCount: 3 },
+                  forkCount: 4,
+                  languages: { edges: [{ size: 5, node: { name: 'Rust', color: '#dea584' } }] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async (path) => {
+      assert.match(path, /mkgp\/owned1/);
+      return { views: [{ count: 8 }] };
+    }
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.repoCount, 3);
+  assert.equal(stats.stars, 6);
+  assert.equal(stats.forks, 7);
+  assert.equal(stats.views, 8);
+  assert.equal(stats.contributions, 3);
+});

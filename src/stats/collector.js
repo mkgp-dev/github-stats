@@ -1,11 +1,13 @@
-function repoQuery(ownedCursor = null, contribCursor = null) {
+function repoQuery({
+  ownedCursor = null,
+  contribCursor = null,
+  includeOwned = true,
+  includeContrib = true
+} = {}) {
   const owned = ownedCursor ? `"${ownedCursor}"` : 'null';
   const contrib = contribCursor ? `"${contribCursor}"` : 'null';
-  return `
-query {
-  viewer {
-    login
-    name
+  const ownedBlock = includeOwned
+    ? `
     repositories(first: 100, isFork: false, after: ${owned}) {
       pageInfo { hasNextPage endCursor }
       nodes {
@@ -16,7 +18,10 @@ query {
           edges { size node { name color } }
         }
       }
-    }
+    }`
+    : '';
+  const contribBlock = includeContrib
+    ? `
     repositoriesContributedTo(
       first: 100,
       includeUserRepositories: false,
@@ -32,7 +37,15 @@ query {
           edges { size node { name color } }
         }
       }
-    }
+    }`
+    : '';
+  return `
+query {
+  viewer {
+    login
+    name
+    ${ownedBlock}
+    ${contribBlock}
   }
 }`;
 }
@@ -79,32 +92,45 @@ export async function collectCoreStats(client, config) {
   const contributedRepos = new Map();
   let ownedCursor = null;
   let contribCursor = null;
+  let hasMoreOwned = true;
+  let hasMoreContrib = true;
   let name = config.githubActor;
   let login = config.githubActor;
 
-  while (true) {
-    const res = await client.graphql(repoQuery(ownedCursor, contribCursor));
+  while (hasMoreOwned || hasMoreContrib) {
+    const res = await client.graphql(
+      repoQuery({
+        ownedCursor,
+        contribCursor,
+        includeOwned: hasMoreOwned,
+        includeContrib: hasMoreContrib
+      })
+    );
     const viewer = res.data.viewer;
     name = viewer.name || viewer.login;
     login = viewer.login;
 
-    for (const repo of viewer.repositories.nodes ?? []) {
-      if (!config.excludedRepos.has(repo.nameWithOwner)) {
-        ownedRepos.set(repo.nameWithOwner, repo);
+    if (hasMoreOwned) {
+      for (const repo of viewer.repositories?.nodes ?? []) {
+        if (!config.excludedRepos.has(repo.nameWithOwner)) {
+          ownedRepos.set(repo.nameWithOwner, repo);
+        }
       }
+      const ownedInfo = viewer.repositories?.pageInfo ?? { hasNextPage: false, endCursor: null };
+      hasMoreOwned = ownedInfo.hasNextPage;
+      ownedCursor = ownedInfo.endCursor;
     }
 
-    for (const repo of viewer.repositoriesContributedTo.nodes ?? []) {
-      if (!config.excludedRepos.has(repo.nameWithOwner)) {
-        contributedRepos.set(repo.nameWithOwner, repo);
+    if (hasMoreContrib) {
+      for (const repo of viewer.repositoriesContributedTo?.nodes ?? []) {
+        if (!config.excludedRepos.has(repo.nameWithOwner)) {
+          contributedRepos.set(repo.nameWithOwner, repo);
+        }
       }
+      const contribInfo = viewer.repositoriesContributedTo?.pageInfo ?? { hasNextPage: false, endCursor: null };
+      hasMoreContrib = contribInfo.hasNextPage;
+      contribCursor = contribInfo.endCursor;
     }
-
-    const ownedInfo = viewer.repositories.pageInfo;
-    const contribInfo = viewer.repositoriesContributedTo.pageInfo;
-    if (!ownedInfo.hasNextPage && !contribInfo.hasNextPage) break;
-    ownedCursor = ownedInfo.endCursor;
-    contribCursor = contribInfo.endCursor;
   }
 
   const metricRepos =
@@ -138,10 +164,12 @@ export async function collectCoreStats(client, config) {
 
   const years =
     (await client.graphql(yearsQuery()))?.data?.viewer?.contributionsCollection?.contributionYears ?? [];
-  const yearData = (await client.graphql(contribByYearQuery(years)))?.data?.viewer ?? {};
   let contributions = 0;
-  for (const key of Object.keys(yearData)) {
-    contributions += yearData[key]?.contributionCalendar?.totalContributions ?? 0;
+  if (years.length > 0) {
+    const yearData = (await client.graphql(contribByYearQuery(years)))?.data?.viewer ?? {};
+    for (const key of Object.keys(yearData)) {
+      contributions += yearData[key]?.contributionCalendar?.totalContributions ?? 0;
+    }
   }
 
   return {
