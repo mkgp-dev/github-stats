@@ -17,12 +17,14 @@ function buildClient(config) {
 }
 
 export async function run(deps = {}) {
-  const useLoadConfig = deps.loadConfig ?? loadConfig;
-  const useCreateClient = deps.createClient ?? buildClient;
-  const useCollectCoreStats = deps.collectCoreStats ?? collectCoreStats;
-  const useCollectLinesChanged = deps.collectLinesChanged ?? collectLinesChanged;
-  const useRenderOverview = deps.renderOverview ?? renderOverview;
-  const useRenderLanguages = deps.renderLanguages ?? renderLanguages;
+  const {
+    loadConfig: useLoadConfig = loadConfig,
+    createClient: useCreateClient = buildClient,
+    collectCoreStats: useCollectCoreStats = collectCoreStats,
+    collectLinesChanged: useCollectLinesChanged = collectLinesChanged,
+    renderOverview: useRenderOverview = renderOverview,
+    renderLanguages: useRenderLanguages = renderLanguages
+  } = deps;
 
   const config = useLoadConfig();
   const client = useCreateClient(config);
