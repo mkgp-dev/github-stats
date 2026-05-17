@@ -17,6 +17,7 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
       ACCESS_TOKEN: 'abc',
       GITHUB_ACTOR: 'mkgp',
       ENABLE_LINES_CHANGED: 'true',
+      LINES_CHANGED_MAX_REPOS: '42',
       COUNT_STATS_FROM_FORKS: '1'
     },
     { warn: (msg) => warnings.push(msg) }
@@ -25,7 +26,7 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
   assert.equal(cfg.repoScope, 'owned');
   assert.equal(cfg.langScope, 'owned_plus_contributed');
   assert.equal(cfg.enableLinesChanged, true);
-  assert.equal(cfg.linesChangedMaxRepos, 30);
+  assert.equal(cfg.linesChangedMaxRepos, 42);
   assert.equal(cfg.requestTimeoutMs, 15000);
   assert.equal(warnings.length, 1);
 });
