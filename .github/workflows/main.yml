@@ -32,9 +32,9 @@ jobs:
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         GITHUB_ACTOR: ${{ secrets.GH_STATS_ACTOR }}
-        REPO_SCOPE: ${{ secrets.REPO_SCOPE }}
-        LANG_SCOPE: ${{ secrets.LANG_SCOPE }}
-        ENABLE_LINES_CHANGED: ${{ secrets.ENABLE_LINES_CHANGED }}
+        REPO_SCOPE: ${{ secrets.REPO_SCOPE || 'owned' }}
+        LANG_SCOPE: ${{ secrets.LANG_SCOPE || 'owned_plus_contributed' }}
+        ENABLE_LINES_CHANGED: ${{ secrets.ENABLE_LINES_CHANGED || 'false' }}
         LINES_CHANGED_MAX_REPOS: ${{ secrets.LINES_CHANGED_MAX_REPOS }}
         LINES_CHANGED_TIMEOUT_MS: ${{ secrets.LINES_CHANGED_TIMEOUT_MS }}
         LINES_CHANGED_MODULE_BUDGET_MS: ${{ secrets.LINES_CHANGED_MODULE_BUDGET_MS }}

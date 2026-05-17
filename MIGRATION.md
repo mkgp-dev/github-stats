@@ -27,5 +27,9 @@
 - In Actions, wire `GITHUB_ACTOR` from a dedicated secret such as `GH_STATS_ACTOR`:
   - `GITHUB_ACTOR: ${{ secrets.GH_STATS_ACTOR }}`
 - Do not wire `GITHUB_ACTOR` from `${{ github.actor }}`. Triggering user and PAT owner can differ and will fail token/actor preflight checks.
+- Workflow applies safe fallbacks when optional scope/toggle secrets are unset:
+  - `REPO_SCOPE: ${{ secrets.REPO_SCOPE || 'owned' }}`
+  - `LANG_SCOPE: ${{ secrets.LANG_SCOPE || 'owned_plus_contributed' }}`
+  - `ENABLE_LINES_CHANGED: ${{ secrets.ENABLE_LINES_CHANGED || 'false' }}`
 - Views are always computed from owned repositories.
 - `lines_changed` remains optional and degrades as partial instead of failing the full run.

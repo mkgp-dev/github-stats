@@ -15,9 +15,9 @@ Automatically generate transparent GitHub stats SVG cards using a Node.js runtim
 
 ## Optional secrets
 
-- `REPO_SCOPE`: `owned` or `owned_plus_contributed` (default: `owned`)
-- `LANG_SCOPE`: `owned` or `owned_plus_contributed` (default: `owned_plus_contributed`)
-- `ENABLE_LINES_CHANGED`: `true` or `false` (default: `false`)
+- `REPO_SCOPE`: `owned` or `owned_plus_contributed` (default: `owned`; workflow fallback applied when secret is unset)
+- `LANG_SCOPE`: `owned` or `owned_plus_contributed` (default: `owned_plus_contributed`; workflow fallback applied when secret is unset)
+- `ENABLE_LINES_CHANGED`: `true` or `false` (default: `false`; workflow fallback applied when secret is unset)
 - `LINES_CHANGED_MAX_REPOS`
 - `LINES_CHANGED_TIMEOUT_MS`
 - `LINES_CHANGED_MODULE_BUDGET_MS`
