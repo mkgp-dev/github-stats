@@ -6,6 +6,8 @@ test('workflow runs node generator instead of python', async () => {
   const yaml = await readFile('.github/workflows/main.yml', 'utf8');
 
   assert.match(yaml, /actions\/setup-node/);
+  assert.match(yaml, /node-version:\s*["']22["']/);
+  assert.doesNotMatch(yaml, /node-version:\s*["']20["']/);
   assert.match(yaml, /npm ci/);
   assert.match(yaml, /npm run generate/);
 
