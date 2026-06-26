@@ -47,7 +47,8 @@ test('run validates viewer login before collecting stats', async () => {
       return baseStats();
     },
     renderOverview: async () => calls.push('overview'),
-    renderLanguages: async () => calls.push('languages')
+    renderLanguages: async () => calls.push('languages'),
+    writeResultJson: async () => {}
   };
 
   await run(deps);
@@ -62,7 +63,8 @@ test('run throws when token login mismatches configured actor', async () => {
     }),
     collectCoreStats: async () => {
       throw new Error('should not run collectCoreStats on login mismatch');
-    }
+    },
+    writeResultJson: async () => {}
   };
 
   await assert.rejects(() => run(deps), /Token login mismatch/);
@@ -78,7 +80,8 @@ test('run rejects before collection when actor/token login mismatches', async ()
     collectCoreStats: async () => {
       collectCalled = true;
       return baseStats();
-    }
+    },
+    writeResultJson: async () => {}
   };
 
   await assert.rejects(() => run(deps), /Token login mismatch/);
@@ -97,7 +100,8 @@ test('run treats token login match as case-insensitive', async () => {
       return baseStats();
     },
     renderOverview: async () => {},
-    renderLanguages: async () => {}
+    renderLanguages: async () => {},
+    writeResultJson: async () => {}
   };
 
   await run(deps);
@@ -126,7 +130,8 @@ test('run collects lines changed only when enabled and passes owned_plus_contrib
     },
     renderLanguages: async () => {
       calls.push(['languages']);
-    }
+    },
+    writeResultJson: async () => {}
   };
 
   await run(deps);
@@ -165,7 +170,8 @@ test('run sets zero lines changed when disabled', async () => {
       capturedMetricValue = stats.activityMetricValue;
       capturedMetricIcon = stats.activityMetricIcon;
     },
-    renderLanguages: async () => {}
+    renderLanguages: async () => {},
+    writeResultJson: async () => {}
   };
 
   await run(deps);
@@ -173,4 +179,37 @@ test('run sets zero lines changed when disabled', async () => {
   assert.equal(capturedMetricLabel, 'Merged pull requests');
   assert.equal(capturedMetricValue, 42);
   assert.match(capturedMetricIcon, /class="octicon"/);
+});
+
+test('run writes result json after resolving final stats', async () => {
+  let captured;
+  const deps = {
+    loadConfig: () => baseConfig({ enableLinesChanged: true, repoScope: 'owned_plus_contributed' }),
+    createClient: () => ({
+      graphql: async () => ({ data: { viewer: { login: 'mkgp' } } })
+    }),
+    collectCoreStats: async () =>
+      baseStats({
+        sources: {
+          ownedRepos: [],
+          contributedRepos: [],
+          metricRepos: [],
+          languageRepos: []
+        }
+      }),
+    collectLinesChanged: async () => ({ additions: 5, deletions: 2, isPartial: false }),
+    renderOverview: async () => {},
+    renderLanguages: async () => {},
+    writeResultJson: async (args) => {
+      captured = args;
+    }
+  };
+
+  await run(deps);
+
+  assert.equal(captured.config.enableLinesChanged, true);
+  assert.equal(captured.outputDir, 'generated');
+  assert.deepEqual(captured.stats.linesChanged, { additions: 5, deletions: 2, isPartial: false });
+  assert.equal(captured.stats.activityMetricLabel, 'Lines of code changed');
+  assert.equal(captured.stats.activityMetricValue, 7);
 });

@@ -4,6 +4,7 @@ import { collectCoreStats } from './stats/collector.js';
 import { collectLinesChanged } from './stats/linesChanged.js';
 import { renderOverview } from './render/overview.js';
 import { renderLanguages } from './render/languages.js';
+import { writeResultJson } from './render/resultJson.js';
 
 const LOGIN_QUERY = 'query { viewer { login } }';
 const ACTIVITY_METRIC_LINES_CHANGED_LABEL = 'Lines of code changed';
@@ -42,7 +43,8 @@ export async function run(deps = {}) {
     collectCoreStats: useCollectCoreStats = collectCoreStats,
     collectLinesChanged: useCollectLinesChanged = collectLinesChanged,
     renderOverview: useRenderOverview = renderOverview,
-    renderLanguages: useRenderLanguages = renderLanguages
+    renderLanguages: useRenderLanguages = renderLanguages,
+    writeResultJson: useWriteResultJson = writeResultJson
   } = deps;
 
   const config = useLoadConfig();
@@ -93,6 +95,12 @@ export async function run(deps = {}) {
       outputDir: 'generated'
     })
   ]);
+
+  await useWriteResultJson({
+    stats,
+    config,
+    outputDir: 'generated'
+  });
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
