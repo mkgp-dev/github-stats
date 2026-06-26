@@ -110,9 +110,28 @@ function mergeUniqueNames(primaryNames, secondaryNames) {
   return [...merged];
 }
 
+function traceLanguages(repo) {
+  return (repo.languages?.edges ?? []).map((edge) => ({
+    name: edge?.node?.name ?? 'Other',
+    size: edge?.size ?? 0,
+    color: edge?.node?.color ?? '#000000'
+  }));
+}
+
+function traceRepo(repo, extra = {}) {
+  return {
+    nameWithOwner: repo.nameWithOwner,
+    stars: repo.stargazers?.totalCount ?? 0,
+    forks: repo.forkCount ?? 0,
+    ...extra,
+    languages: traceLanguages(repo)
+  };
+}
+
 export async function collectCoreStats(client, config) {
   const ownedRepos = new Map();
   const contributedRepos = new Map();
+  const ownedRepoViews = new Map();
   let ownedCursor = null;
   let contribCursor = null;
   let hasMoreOwned = true;
@@ -183,7 +202,9 @@ export async function collectCoreStats(client, config) {
   let views = 0;
   for (const repo of ownedRepos.values()) {
     const data = await client.rest(`/repos/${repo.nameWithOwner}/traffic/views`);
-    for (const row of data.views ?? []) views += row.count ?? 0;
+    const repoViews = (data.views ?? []).reduce((sum, row) => sum + (row.count ?? 0), 0);
+    ownedRepoViews.set(repo.nameWithOwner, repoViews);
+    views += repoViews;
   }
 
   const years =
@@ -212,6 +233,28 @@ export async function collectCoreStats(client, config) {
     repoNamesForLines:
       config.repoScope === 'owned_plus_contributed'
         ? mergeUniqueNames(ownedRepos.keys(), contributedRepos.keys())
-        : [...ownedRepos.keys()]
+        : [...ownedRepos.keys()],
+    sources: {
+      ownedRepos: [...ownedRepos.values()].map((repo) =>
+        traceRepo(repo, { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 })
+      ),
+      contributedRepos: [...contributedRepos.values()].map((repo) => traceRepo(repo)),
+      metricRepos: metricRepos.map((repo) =>
+        traceRepo(
+          repo,
+          ownedRepoViews.has(repo.nameWithOwner)
+            ? { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 }
+            : {}
+        )
+      ),
+      languageRepos: langRepos.map((repo) =>
+        traceRepo(
+          repo,
+          ownedRepoViews.has(repo.nameWithOwner)
+            ? { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 }
+            : {}
+        )
+      )
+    }
   };
 }

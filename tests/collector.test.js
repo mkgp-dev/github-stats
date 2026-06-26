@@ -423,3 +423,112 @@ test('repoNamesForLines dedupes overlaps with deterministic owned-first order', 
   assert.deepEqual(stats.contributedRepoNames, ['mkgp/shared', 'other/z-contrib']);
   assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/shared', 'other/z-contrib']);
 });
+
+test('returns source traces for owned, contributed, metric, and language repos', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      if (query.includes('contributionsCollection(from:')) {
+        throw new Error('unexpected per-year query when years are empty');
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 10 },
+                  forkCount: 4,
+                  languages: { edges: [{ size: 100, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                },
+                {
+                  nameWithOwner: 'mkgp/owned-only',
+                  stargazers: { totalCount: 1 },
+                  forkCount: 1,
+                  languages: { edges: [{ size: 50, node: { name: 'TypeScript', color: '#3178c6' } }] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/shared',
+                  stargazers: { totalCount: 999 },
+                  forkCount: 999,
+                  languages: { edges: [{ size: 999, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                },
+                {
+                  nameWithOwner: 'other/contrib-only',
+                  stargazers: { totalCount: 2 },
+                  forkCount: 3,
+                  languages: { edges: [{ size: 25, node: { name: 'Go', color: null } }] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async (path) => {
+      if (path.includes('mkgp/shared')) return { views: [{ count: 7 }, { count: 5 }] };
+      if (path.includes('mkgp/owned-only')) return { views: [{ count: 2 }] };
+      return { views: [] };
+    }
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.deepEqual(stats.sources.ownedRepos, [
+    {
+      nameWithOwner: 'mkgp/shared',
+      stars: 10,
+      forks: 4,
+      views: 12,
+      languages: [{ name: 'JavaScript', size: 100, color: '#f1e05a' }]
+    },
+    {
+      nameWithOwner: 'mkgp/owned-only',
+      stars: 1,
+      forks: 1,
+      views: 2,
+      languages: [{ name: 'TypeScript', size: 50, color: '#3178c6' }]
+    }
+  ]);
+  assert.deepEqual(stats.sources.contributedRepos, [
+    {
+      nameWithOwner: 'mkgp/shared',
+      stars: 999,
+      forks: 999,
+      languages: [{ name: 'JavaScript', size: 999, color: '#f1e05a' }]
+    },
+    {
+      nameWithOwner: 'other/contrib-only',
+      stars: 2,
+      forks: 3,
+      languages: [{ name: 'Go', size: 25, color: '#000000' }]
+    }
+  ]);
+  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
+    'mkgp/shared',
+    'mkgp/owned-only',
+    'other/contrib-only'
+  ]);
+  assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
+    'mkgp/shared',
+    'mkgp/owned-only',
+    'other/contrib-only'
+  ]);
+});
