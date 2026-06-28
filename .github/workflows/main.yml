@@ -68,26 +68,26 @@ jobs:
 
         if [ ! -f README.md ]; then
           cat > README.md <<EOF
-# Output
+        # Output
 
-## Overview
+        ## Overview
 
-Copy this snippet for your overview card:
+        Copy this snippet for your overview card:
 
-\`\`\`md
-![GitHub Stats Overview](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/overview.svg)
-\`\`\`
+        \`\`\`md
+        ![GitHub Stats Overview](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/overview.svg)
+        \`\`\`
 
-## Languages
+        ## Languages
 
-Copy this snippet for your languages card:
+        Copy this snippet for your languages card:
 
-\`\`\`md
-![Most Used Languages](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/languages.svg)
-\`\`\`
+        \`\`\`md
+        ![Most Used Languages](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/languages.svg)
+        \`\`\`
 
-<sub>You can check your logs <a href="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/result.json">here</a>.</sub>
-EOF
+        <sub>You can check your logs <a href="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/result.json">here</a>.</sub>
+        EOF
         fi
 
         git add generated result.json README.md

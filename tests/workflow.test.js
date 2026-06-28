@@ -27,4 +27,14 @@ test('workflow runs node generator instead of python', async () => {
   assert.match(yaml, /\\`\\`\\`md/);
   assert.match(yaml, /!\[GitHub Stats Overview\]/);
   assert.match(yaml, /!\[Most Used Languages\]/);
+
+  const lines = yaml.split('\n');
+  const readmeStart = lines.findIndex((line) => line.includes('cat > README.md <<EOF'));
+  const readmeEnd = lines.findIndex((line, index) => index > readmeStart && line.trim() === 'EOF');
+
+  assert.notEqual(readmeStart, -1);
+  assert.notEqual(readmeEnd, -1);
+  for (const line of lines.slice(readmeStart + 1, readmeEnd + 1)) {
+    if (line !== '') assert.match(line, /^        /);
+  }
 });
