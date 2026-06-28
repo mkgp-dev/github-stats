@@ -1,4 +1,3 @@
-import { join } from 'node:path';
 import { atomicWrite } from '../io/atomicWrite.js';
 
 const RESULT_VERSION = '2.1.0';
@@ -74,7 +73,7 @@ export function buildResultPayload({
 export async function writeResultJson({
   stats,
   config,
-  outputDir = 'generated',
+  outputPath = 'result.json',
   now = () => new Date()
 }) {
   const payload = buildResultPayload({
@@ -83,5 +82,5 @@ export async function writeResultJson({
     generatedAt: now().toISOString()
   });
   const content = `${JSON.stringify(payload, null, 2)}\n`;
-  await atomicWrite(join(outputDir, 'result.json'), content);
+  await atomicWrite(outputPath, content);
 }

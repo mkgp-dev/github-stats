@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildResultPayload, writeResultJson } from '../src/render/resultJson.js';
@@ -101,19 +101,21 @@ test('buildResultPayload leaves linesChangedRepos empty when lines changed is di
   assert.deepEqual(payload.sources.linesChangedRepos, []);
 });
 
-test('writeResultJson writes formatted JSON with trailing newline', async () => {
+test('writeResultJson writes formatted JSON to root result path with trailing newline', async () => {
   const outDir = await mkdtemp(join(tmpdir(), 'github-stats-result-'));
+  const outputPath = join(outDir, 'result.json');
 
   await writeResultJson({
     stats: statsFixture(),
     config: configFixture(),
-    outputDir: outDir,
+    outputPath,
     now: () => new Date('2026-06-26T00:00:00.000Z')
   });
 
-  const content = await readFile(join(outDir, 'result.json'), 'utf8');
+  const content = await readFile(outputPath, 'utf8');
   const parsed = JSON.parse(content);
 
+  await assert.rejects(() => stat(join(outDir, 'generated', 'result.json')), /ENOENT/);
   assert.equal(content.endsWith('\n'), true);
   assert.match(content, /\n  "version": "2\.1\.0"/);
   assert.equal(parsed.generatedAt, '2026-06-26T00:00:00.000Z');

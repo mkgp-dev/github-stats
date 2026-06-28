@@ -208,8 +208,38 @@ test('run writes result json after resolving final stats', async () => {
   await run(deps);
 
   assert.equal(captured.config.enableLinesChanged, true);
-  assert.equal(captured.outputDir, 'generated');
+  assert.equal(captured.outputPath, 'result.json');
   assert.deepEqual(captured.stats.linesChanged, { additions: 5, deletions: 2, isPartial: false });
   assert.equal(captured.stats.activityMetricLabel, 'Lines of code changed');
   assert.equal(captured.stats.activityMetricValue, 7);
+});
+
+test('run keeps svg outputs under generated while result json writes at root', async () => {
+  const calls = [];
+  const deps = {
+    loadConfig: () => baseConfig({ enableLinesChanged: false }),
+    createClient: () => ({
+      graphql: async (query) => {
+        if (query.includes('viewer { login }')) {
+          return { data: { viewer: { login: 'mkgp' } } };
+        }
+        if (query.includes('is:pr is:merged')) {
+          return { data: { search: { issueCount: 1 } } };
+        }
+        return {};
+      }
+    }),
+    collectCoreStats: async () => baseStats(),
+    renderOverview: async ({ outputDir }) => calls.push(['overview', outputDir]),
+    renderLanguages: async ({ outputDir }) => calls.push(['languages', outputDir]),
+    writeResultJson: async ({ outputPath }) => calls.push(['result', outputPath])
+  };
+
+  await run(deps);
+
+  assert.deepEqual(calls.sort(), [
+    ['languages', 'generated'],
+    ['overview', 'generated'],
+    ['result', 'result.json']
+  ]);
 });

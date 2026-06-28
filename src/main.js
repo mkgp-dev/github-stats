@@ -99,7 +99,7 @@ export async function run(deps = {}) {
   await useWriteResultJson({
     stats,
     config,
-    outputDir: 'generated'
+    outputPath: 'result.json'
   });
 }
 
