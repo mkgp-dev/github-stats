@@ -1,6 +1,7 @@
 import { atomicWrite } from '../io/atomicWrite.js';
+import packageJson from '../../package.json' with { type: 'json' };
 
-const RESULT_VERSION = '2.1.0';
+const RESULT_VERSION = packageJson.version;
 
 function setToArray(value) {
   return [...(value ?? [])];

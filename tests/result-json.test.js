@@ -4,6 +4,7 @@ import { mkdtemp, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildResultPayload, writeResultJson } from '../src/render/resultJson.js';
+import packageJson from '../package.json' with { type: 'json' };
 
 function statsFixture() {
   return {
@@ -71,7 +72,7 @@ test('buildResultPayload serializes safe summary, config, and sources', () => {
     generatedAt: '2026-06-26T00:00:00.000Z'
   });
 
-  assert.equal(payload.version, '2.1.0');
+  assert.equal(payload.version, packageJson.version);
   assert.equal(payload.generatedAt, '2026-06-26T00:00:00.000Z');
   assert.deepEqual(payload.config, {
     repoScope: 'owned_plus_contributed',
@@ -119,7 +120,7 @@ test('writeResultJson writes formatted JSON to root result path with trailing ne
 
   await assert.rejects(() => stat(join(outDir, 'generated', 'result.json')), /ENOENT/);
   assert.equal(content.endsWith('\n'), true);
-  assert.match(content, /\n  "version": "2\.1\.0"/);
+  assert.equal(parsed.version, packageJson.version);
   assert.equal(parsed.generatedAt, '2026-06-26T00:00:00.000Z');
   assert.equal(content.includes('secret-token'), false);
   assert.equal(content.includes('<svg'), false);
