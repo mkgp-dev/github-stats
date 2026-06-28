@@ -44,10 +44,52 @@ jobs:
 
     - name: Commit to the output branch of repo
       run: |
+        set -euo pipefail
+
+        artifact_dir="$RUNNER_TEMP/github-stats-output"
+        rm -rf "$artifact_dir"
+        mkdir -p "$artifact_dir"
+        cp -R generated "$artifact_dir/generated"
+        cp result.json "$artifact_dir/result.json"
+
         git config --global user.name "github-stats[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m 'temp commit' || echo
-        git checkout output 2>/dev/null || git checkout --orphan output && git rm -rf . && git checkout main -- generated/
-        git commit -m 'Update generated files' || echo
+
+        if git checkout output 2>/dev/null; then
+          git rm -rf generated result.json 2>/dev/null || true
+          rm -rf generated result.json
+        else
+          git checkout --orphan output
+          git rm -rf . 2>/dev/null || true
+        fi
+
+        cp -R "$RUNNER_TEMP/github-stats-output/generated" "./generated"
+        cp "$RUNNER_TEMP/github-stats-output/result.json" "result.json"
+
+        if [ ! -f README.md ]; then
+          cat > README.md <<EOF
+# Output
+
+## Overview
+
+Copy this snippet for your overview card:
+
+\`\`\`md
+![GitHub Stats Overview](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/overview.svg)
+\`\`\`
+
+## Languages
+
+Copy this snippet for your languages card:
+
+\`\`\`md
+![Most Used Languages](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/generated/languages.svg)
+\`\`\`
+
+<sub>You can check your logs <a href="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/output/result.json">here</a>.</sub>
+EOF
+        fi
+
+        git add generated result.json README.md
+        git commit -m 'Update generated files' || true
         git push origin output -f
