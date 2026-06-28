@@ -69,7 +69,9 @@ test('views always use owned repos even when REPO_SCOPE is owned_plus_contribute
   assert.equal(stats.views, 7);
   assert.equal(restCalls.length, 1);
   assert.match(restCalls[0], /mkgp\/owned/);
-  assert.equal(stats.stars, 5002);
+  assert.equal(stats.stars, 2);
+  assert.equal(stats.repoCount, 1);
+  assert.equal(stats.forks, 1);
 });
 
 test('empty contributionYears skips contrib-by-year query and keeps contributions at 0', async () => {
@@ -207,9 +209,9 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 3);
-  assert.equal(stats.stars, 6);
-  assert.equal(stats.forks, 7);
+  assert.equal(stats.repoCount, 1);
+  assert.equal(stats.stars, 1);
+  assert.equal(stats.forks, 1);
   assert.equal(stats.views, 8);
   assert.equal(stats.contributions, 3);
 });
@@ -277,9 +279,9 @@ test('dedupes overlap between owned and contributed repos for metrics and langua
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 3);
-  assert.equal(stats.stars, 13);
-  assert.equal(stats.forks, 8);
+  assert.equal(stats.repoCount, 2);
+  assert.equal(stats.stars, 11);
+  assert.equal(stats.forks, 5);
   assert.equal(stats.languages.JavaScript.size, 100);
   assert.equal(stats.languages.TypeScript.size, 50);
   assert.equal(stats.languages.Go.size, 25);
@@ -523,12 +525,84 @@ test('returns source traces for owned, contributed, metric, and language repos',
   ]);
   assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
     'mkgp/shared',
-    'mkgp/owned-only',
-    'other/contrib-only'
+    'mkgp/owned-only'
   ]);
   assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
     'mkgp/shared',
     'mkgp/owned-only',
     'other/contrib-only'
+  ]);
+});
+
+test('repository metrics stay owned-only when repo scope includes contributed repos', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/owned-one',
+                  stargazers: { totalCount: 2 },
+                  forkCount: 1,
+                  languages: { edges: [{ size: 100, node: { name: 'JavaScript', color: '#f1e05a' } }] }
+                },
+                {
+                  nameWithOwner: 'org/owned-two',
+                  stargazers: { totalCount: 3 },
+                  forkCount: 4,
+                  languages: { edges: [{ size: 50, node: { name: 'TypeScript', color: '#3178c6' } }] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'popular/contrib-only',
+                  stargazers: { totalCount: 1000 },
+                  forkCount: 500,
+                  languages: { edges: [{ size: 25, node: { name: 'Go', color: '#00add8' } }] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.repoCount, 2);
+  assert.equal(stats.stars, 5);
+  assert.equal(stats.forks, 5);
+  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
+    'mkgp/owned-one',
+    'org/owned-two'
+  ]);
+  assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
+    'mkgp/owned-one',
+    'org/owned-two',
+    'popular/contrib-only'
+  ]);
+  assert.deepEqual(stats.repoNamesForLines, [
+    'mkgp/owned-one',
+    'org/owned-two',
+    'popular/contrib-only'
   ]);
 });

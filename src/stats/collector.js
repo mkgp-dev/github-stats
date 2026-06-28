@@ -175,10 +175,7 @@ export async function collectCoreStats(client, config) {
     }
   }
 
-  const metricRepos =
-    config.repoScope === 'owned_plus_contributed'
-      ? mergeUniqueRepos(ownedRepos.values(), contributedRepos.values())
-      : [...ownedRepos.values()];
+  const metricRepos = [...ownedRepos.values()];
 
   const langRepos =
     config.langScope === 'owned_plus_contributed'
