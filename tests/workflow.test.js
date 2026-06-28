@@ -16,9 +16,14 @@ test('workflow runs node generator instead of python', async () => {
   assert.doesNotMatch(yaml, /generate_images\.py/);
 
   assert.match(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*secrets\.GH_STATS_ACTOR\s*\}\}/);
+  assert.match(yaml, /METRIC_OWNERS:\s*\$\{\{\s*secrets\.METRIC_OWNERS\s*\}\}/);
   assert.doesNotMatch(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*github\.actor\s*\}\}/);
 
   assert.match(yaml, /cp -R "\$RUNNER_TEMP\/github-stats-output\/generated" "\.\/generated"/);
+  assert.match(
+    yaml,
+    /fi\n\n        rm -rf generated result\.json\n        cp -R "\$RUNNER_TEMP\/github-stats-output\/generated" "\.\/generated"/
+  );
   assert.match(yaml, /cp "\$RUNNER_TEMP\/github-stats-output\/result\.json" "result\.json"/);
   assert.match(yaml, /if \[ ! -f README\.md \]; then/);
   assert.match(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/generated\/overview\.svg/);

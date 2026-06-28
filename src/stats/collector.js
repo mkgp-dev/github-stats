@@ -12,6 +12,7 @@ function repoQuery({
       pageInfo { hasNextPage endCursor }
       nodes {
         nameWithOwner
+        owner { login }
         stargazers { totalCount }
         forkCount
         languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
@@ -31,6 +32,7 @@ function repoQuery({
       pageInfo { hasNextPage endCursor }
       nodes {
         nameWithOwner
+        owner { login }
         stargazers { totalCount }
         forkCount
         languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
@@ -110,6 +112,15 @@ function mergeUniqueNames(primaryNames, secondaryNames) {
   return [...merged];
 }
 
+function ownerLogin(repo) {
+  return repo.owner?.login ?? repo.nameWithOwner?.split('/')[0];
+}
+
+function isMetricOwner(repo, config) {
+  const metricOwners = config.metricOwners ?? new Set([config.githubActor]);
+  return metricOwners.has(ownerLogin(repo));
+}
+
 function traceLanguages(repo) {
   return (repo.languages?.edges ?? []).map((edge) => ({
     name: edge?.node?.name ?? 'Other',
@@ -175,7 +186,7 @@ export async function collectCoreStats(client, config) {
     }
   }
 
-  const metricRepos = [...ownedRepos.values()];
+  const metricRepos = [...ownedRepos.values()].filter((repo) => isMetricOwner(repo, config));
 
   const langRepos =
     config.langScope === 'owned_plus_contributed'

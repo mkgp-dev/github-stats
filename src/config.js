@@ -44,6 +44,11 @@ function parseSet(env, key) {
   return new Set(raw.split(',').map((x) => x.trim()).filter(Boolean));
 }
 
+function parseMetricOwners(env, githubActor) {
+  const raw = env.METRIC_OWNERS ?? githubActor;
+  return new Set(raw.split(',').map((x) => x.trim()).filter(Boolean));
+}
+
 export function loadConfig(env = process.env, logger = console) {
   const accessToken = requireString(env, 'ACCESS_TOKEN');
   const githubActor = requireString(env, 'GITHUB_ACTOR');
@@ -67,6 +72,7 @@ export function loadConfig(env = process.env, logger = console) {
     requestTimeoutMs: parseIntValue(env, 'REQUEST_TIMEOUT_MS', 15000),
     maxConcurrency: parseIntValue(env, 'MAX_CONCURRENCY', 10, 1, 50),
     maxRetries: parseIntValue(env, 'MAX_RETRIES', 5, 1, 10),
+    metricOwners: parseMetricOwners(env, githubActor),
     excludedRepos: parseSet(env, 'EXCLUDED_REPOS'),
     excludedLangs: parseSet(env, 'EXCLUDED_LANGS')
   };

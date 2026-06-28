@@ -14,6 +14,18 @@ Automatically generate transparent GitHub statistic cards with JavaScript.
 ![](https://raw.githubusercontent.com/mkgp-dev/github-stats/output/generated/overview.svg)
 ![](https://raw.githubusercontent.com/mkgp-dev/github-stats/output/generated/languages.svg)
 
+## Metric Owners
+
+Stars, forks, and repository count use `METRIC_OWNERS` to decide which repository owners count toward aggregate metrics. By default, it uses `GITHUB_ACTOR`, so only repositories under your personal profile count.
+
+Set `METRIC_OWNERS` to a comma-separated owner allowlist when you also want selected organization repositories counted:
+
+```env
+METRIC_OWNERS=mkgp,TerniLabs
+```
+
+Use `EXCLUDED_REPOS` to remove specific repositories from collection even when their owner is allowed.
+
 ## Credits
 
 - [rahul-jha98/github-stats-transparent](https://github.com/rahul-jha98/github-stats-transparent)

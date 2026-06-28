@@ -25,6 +25,7 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
 
   assert.equal(cfg.repoScope, 'owned');
   assert.equal(cfg.langScope, 'owned_plus_contributed');
+  assert.deepEqual([...cfg.metricOwners], ['mkgp']);
   assert.equal(cfg.enableLinesChanged, true);
   assert.equal(cfg.linesChangedMaxRepos, 42);
   assert.equal(cfg.requestTimeoutMs, 15000);
@@ -37,6 +38,17 @@ test('loadConfig uses default linesChangedMaxRepos when unset', () => {
   assert.equal(cfg.requestTimeoutMs, 15000);
   assert.equal(cfg.maxConcurrency, 10);
   assert.equal(cfg.maxRetries, 5);
+  assert.deepEqual([...cfg.metricOwners], ['mkgp']);
+});
+
+test('loadConfig parses METRIC_OWNERS allowlist', () => {
+  const cfg = loadConfig({
+    ACCESS_TOKEN: 'abc',
+    GITHUB_ACTOR: 'mkgp',
+    METRIC_OWNERS: ' mkgp, TerniLabs, , mkgp '
+  });
+
+  assert.deepEqual([...cfg.metricOwners], ['mkgp', 'TerniLabs']);
 });
 
 test('loadConfig rejects malformed integer env strings', () => {

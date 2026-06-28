@@ -60,6 +60,7 @@ test('views always use owned repos even when REPO_SCOPE is owned_plus_contribute
 
   const stats = await collectCoreStats(client, {
     githubActor: 'mkgp',
+    metricOwners: new Set(['mkgp']),
     repoScope: 'owned_plus_contributed',
     langScope: 'owned_plus_contributed',
     excludedRepos: new Set(),
@@ -219,6 +220,9 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
 test('dedupes overlap between owned and contributed repos for metrics and languages', async () => {
   const client = {
     graphql: async (query) => {
+      if (!query.includes('contributionYears')) {
+        assert.match(query, /owner \{ login \}/);
+      }
       if (query.includes('contributionYears')) {
         return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
       }
@@ -550,12 +554,14 @@ test('repository metrics stay owned-only when repo scope includes contributed re
               nodes: [
                 {
                   nameWithOwner: 'mkgp/owned-one',
+                  owner: { login: 'mkgp' },
                   stargazers: { totalCount: 2 },
                   forkCount: 1,
                   languages: { edges: [{ size: 100, node: { name: 'JavaScript', color: '#f1e05a' } }] }
                 },
                 {
                   nameWithOwner: 'org/owned-two',
+                  owner: { login: 'TerniLabs' },
                   stargazers: { totalCount: 3 },
                   forkCount: 4,
                   languages: { edges: [{ size: 50, node: { name: 'TypeScript', color: '#3178c6' } }] }
@@ -567,6 +573,7 @@ test('repository metrics stay owned-only when repo scope includes contributed re
               nodes: [
                 {
                   nameWithOwner: 'popular/contrib-only',
+                  owner: { login: 'popular' },
                   stargazers: { totalCount: 1000 },
                   forkCount: 500,
                   languages: { edges: [{ size: 25, node: { name: 'Go', color: '#00add8' } }] }
@@ -588,12 +595,11 @@ test('repository metrics stay owned-only when repo scope includes contributed re
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 2);
-  assert.equal(stats.stars, 5);
-  assert.equal(stats.forks, 5);
+  assert.equal(stats.repoCount, 1);
+  assert.equal(stats.stars, 2);
+  assert.equal(stats.forks, 1);
   assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/owned-one',
-    'org/owned-two'
+    'mkgp/owned-one'
   ]);
   assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
     'mkgp/owned-one',
@@ -604,5 +610,72 @@ test('repository metrics stay owned-only when repo scope includes contributed re
     'mkgp/owned-one',
     'org/owned-two',
     'popular/contrib-only'
+  ]);
+});
+
+test('repository metrics include configured organization owners', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'mkgp/owned-one',
+                  owner: { login: 'mkgp' },
+                  stargazers: { totalCount: 2 },
+                  forkCount: 1,
+                  languages: { edges: [] }
+                },
+                {
+                  nameWithOwner: 'TerniLabs/kaizer-music-player',
+                  owner: { login: 'TerniLabs' },
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'popular/contrib-only',
+                  owner: { login: 'popular' },
+                  stargazers: { totalCount: 1000 },
+                  forkCount: 500,
+                  languages: { edges: [] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp',
+    metricOwners: new Set(['mkgp', 'TerniLabs']),
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.repoCount, 2);
+  assert.equal(stats.stars, 3);
+  assert.equal(stats.forks, 1);
+  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
+    'mkgp/owned-one',
+    'TerniLabs/kaizer-music-player'
   ]);
 });

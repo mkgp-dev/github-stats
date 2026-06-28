@@ -32,6 +32,7 @@ jobs:
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         GITHUB_ACTOR: ${{ secrets.GH_STATS_ACTOR }}
+        METRIC_OWNERS: ${{ secrets.METRIC_OWNERS }}
         REPO_SCOPE: ${{ secrets.REPO_SCOPE || 'owned' }}
         LANG_SCOPE: ${{ secrets.LANG_SCOPE || 'owned_plus_contributed' }}
         ENABLE_LINES_CHANGED: ${{ secrets.ENABLE_LINES_CHANGED || 'false' }}
@@ -63,6 +64,7 @@ jobs:
           git rm -rf . 2>/dev/null || true
         fi
 
+        rm -rf generated result.json
         cp -R "$RUNNER_TEMP/github-stats-output/generated" "./generated"
         cp "$RUNNER_TEMP/github-stats-output/result.json" "result.json"
 
