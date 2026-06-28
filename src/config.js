@@ -46,7 +46,7 @@ function parseSet(env, key) {
 
 function parseMetricOwners(env, githubActor) {
   const raw = env.METRIC_OWNERS ?? githubActor;
-  return new Set(raw.split(',').map((x) => x.trim()).filter(Boolean));
+  return new Set(raw.split(',').map((x) => x.trim().toLowerCase()).filter(Boolean));
 }
 
 export function loadConfig(env = process.env, logger = console) {

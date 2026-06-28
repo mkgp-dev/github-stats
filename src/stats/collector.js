@@ -113,7 +113,7 @@ function mergeUniqueNames(primaryNames, secondaryNames) {
 }
 
 function ownerLogin(repo) {
-  return repo.owner?.login ?? repo.nameWithOwner?.split('/')[0];
+  return (repo.owner?.login ?? repo.nameWithOwner?.split('/')[0] ?? '').toLowerCase();
 }
 
 function isMetricOwner(repo, config) {

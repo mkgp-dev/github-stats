@@ -48,7 +48,7 @@ test('loadConfig parses METRIC_OWNERS allowlist', () => {
     METRIC_OWNERS: ' mkgp, TerniLabs, , mkgp '
   });
 
-  assert.deepEqual([...cfg.metricOwners], ['mkgp', 'TerniLabs']);
+  assert.deepEqual([...cfg.metricOwners], ['mkgp', 'ternilabs']);
 });
 
 test('loadConfig rejects malformed integer env strings', () => {

@@ -58,6 +58,7 @@ function configFixture() {
     linesChangedTimeoutMs: 20000,
     linesChangedModuleBudgetMs: 120000,
     linesChangedMaxRetries: 5,
+    metricOwners: new Set(['mkgp-dev', 'ternilabs']),
     excludedRepos: new Set(['mkgp/private']),
     excludedLangs: new Set(['HTML'])
   };
@@ -80,6 +81,7 @@ test('buildResultPayload serializes safe summary, config, and sources', () => {
     linesChangedTimeoutMs: 20000,
     linesChangedModuleBudgetMs: 120000,
     linesChangedMaxRetries: 5,
+    metricOwners: ['mkgp-dev', 'ternilabs'],
     excludedRepos: ['mkgp/private'],
     excludedLangs: ['HTML']
   });

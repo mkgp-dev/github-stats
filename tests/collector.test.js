@@ -664,7 +664,7 @@ test('repository metrics include configured organization owners', async () => {
 
   const stats = await collectCoreStats(client, {
     githubActor: 'mkgp',
-    metricOwners: new Set(['mkgp', 'TerniLabs']),
+    metricOwners: new Set(['mkgp', 'ternilabs']),
     repoScope: 'owned_plus_contributed',
     langScope: 'owned_plus_contributed',
     excludedRepos: new Set(),
@@ -676,6 +676,56 @@ test('repository metrics include configured organization owners', async () => {
   assert.equal(stats.forks, 1);
   assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
     'mkgp/owned-one',
+    'TerniLabs/kaizer-music-player'
+  ]);
+});
+
+test('repository metric owner matching is case-insensitive', async () => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp-dev',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'TerniLabs/kaizer-music-player',
+                  owner: { login: 'TerniLabs' },
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: []
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp-dev',
+    metricOwners: new Set(['mkgp-dev', 'ternilabs']),
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  assert.equal(stats.repoCount, 1);
+  assert.equal(stats.stars, 1);
+  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
     'TerniLabs/kaizer-music-player'
   ]);
 });

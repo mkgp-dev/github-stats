@@ -15,6 +15,7 @@ function serializeConfig(config) {
     linesChangedTimeoutMs: config.linesChangedTimeoutMs,
     linesChangedModuleBudgetMs: config.linesChangedModuleBudgetMs,
     linesChangedMaxRetries: config.linesChangedMaxRetries,
+    metricOwners: setToArray(config.metricOwners),
     excludedRepos: setToArray(config.excludedRepos),
     excludedLangs: setToArray(config.excludedLangs)
   };

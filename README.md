@@ -21,8 +21,10 @@ Stars, forks, and repository count use `METRIC_OWNERS` to decide which repositor
 Set `METRIC_OWNERS` to a comma-separated owner allowlist when you also want selected organization repositories counted:
 
 ```env
-METRIC_OWNERS=mkgp,TerniLabs
+METRIC_OWNERS=mkgp-dev,ternilabs
 ```
+
+Owner matching is case-insensitive. Use the `summary.login` value from `result.json` for your personal owner.
 
 Use `EXCLUDED_REPOS` to remove specific repositories from collection even when their owner is allowed.
 
