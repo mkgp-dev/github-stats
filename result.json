@@ -1,0 +1,3407 @@
+{
+  "version": "2.1.1",
+  "generatedAt": "2026-07-02T02:04:18.831Z",
+  "config": {
+    "repoScope": "owned",
+    "langScope": "owned_plus_contributed",
+    "enableLinesChanged": false,
+    "linesChangedMaxRepos": 30,
+    "linesChangedTimeoutMs": 20000,
+    "linesChangedModuleBudgetMs": 120000,
+    "linesChangedMaxRetries": 5,
+    "metricOwners": [
+      "mkgp-dev",
+      "ternilabs"
+    ],
+    "excludedRepos": [],
+    "excludedLangs": []
+  },
+  "summary": {
+    "name": "Mark Pelayo",
+    "login": "mkgp-dev",
+    "repoCount": 31,
+    "stars": 1,
+    "forks": 0,
+    "contributions": 2215,
+    "views": 16,
+    "languages": {
+      "PHP": {
+        "size": 1135191,
+        "occurrences": 1,
+        "color": "#4F5D95",
+        "prop": 5.917602980635596
+      },
+      "CSS": {
+        "size": 2875671,
+        "occurrences": 35,
+        "color": "#663399",
+        "prop": 14.990498762699268
+      },
+      "JavaScript": {
+        "size": 2237297,
+        "occurrences": 38,
+        "color": "#f1e05a",
+        "prop": 11.662738161038167
+      },
+      "HTML": {
+        "size": 445555,
+        "occurrences": 29,
+        "color": "#e34c26",
+        "prop": 2.3226202427935854
+      },
+      "Python": {
+        "size": 1522331,
+        "occurrences": 11,
+        "color": "#3572A5",
+        "prop": 7.9357134289418845
+      },
+      "C": {
+        "size": 143097,
+        "occurrences": 3,
+        "color": "#555555",
+        "prop": 0.7459460423135946
+      },
+      "Makefile": {
+        "size": 1057,
+        "occurrences": 1,
+        "color": "#427819",
+        "prop": 0.0055100034712500575
+      },
+      "TypeScript": {
+        "size": 9407841,
+        "occurrences": 30,
+        "color": "#3178c6",
+        "prop": 49.041851056734735
+      },
+      "Rust": {
+        "size": 402400,
+        "occurrences": 3,
+        "color": "#dea584",
+        "prop": 2.0976588427918856
+      },
+      "EJS": {
+        "size": 68266,
+        "occurrences": 4,
+        "color": "#a91e50",
+        "prop": 0.35586177575057376
+      },
+      "Shell": {
+        "size": 265819,
+        "occurrences": 5,
+        "color": "#89e051",
+        "prop": 1.3856798606662435
+      },
+      "Dockerfile": {
+        "size": 6126,
+        "occurrences": 1,
+        "color": "#384d54",
+        "prop": 0.03193404093176713
+      },
+      "Java": {
+        "size": 323538,
+        "occurrences": 1,
+        "color": "#b07219",
+        "prop": 1.6865614977117325
+      },
+      "C++": {
+        "size": 247244,
+        "occurrences": 1,
+        "color": "#f34b7d",
+        "prop": 1.288850802503074
+      },
+      "Dart": {
+        "size": 32839,
+        "occurrences": 1,
+        "color": "#00B4AB",
+        "prop": 0.17118543424066288
+      },
+      "Ruby": {
+        "size": 27527,
+        "occurrences": 1,
+        "color": "#701516",
+        "prop": 0.14349466939744593
+      },
+      "Go": {
+        "size": 23746,
+        "occurrences": 1,
+        "color": "#00ADD8",
+        "prop": 0.12378480835222695
+      },
+      "Haskell": {
+        "size": 17746,
+        "occurrences": 1,
+        "color": "#5e5086",
+        "prop": 0.0925075890263042
+      }
+    },
+    "linesChanged": {
+      "additions": 0,
+      "deletions": 0,
+      "isPartial": false
+    },
+    "activityMetricLabel": "Merged pull requests",
+    "activityMetricValue": 110
+  },
+  "sources": {
+    "ownedRepos": [
+      {
+        "nameWithOwner": "mkgp-dev/Blog-Portfolio-PHP",
+        "stars": 0,
+        "forks": 0,
+        "views": 10,
+        "languages": [
+          {
+            "name": "PHP",
+            "size": 1135191,
+            "color": "#4F5D95"
+          },
+          {
+            "name": "CSS",
+            "size": 281409,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 132458,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-fcc-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 90102,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 37329,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2694,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "me50/mkgp-dev",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 22995,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 18922,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 455,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50x-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "C",
+            "size": 32294,
+            "color": "#555555"
+          },
+          {
+            "name": "Python",
+            "size": 22109,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 18632,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2256,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "code50/188409627",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 945536,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 150332,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 113912,
+            "color": "#e34c26"
+          },
+          {
+            "name": "C",
+            "size": 58966,
+            "color": "#555555"
+          },
+          {
+            "name": "Python",
+            "size": 25106,
+            "color": "#3572A5"
+          },
+          {
+            "name": "Makefile",
+            "size": 1057,
+            "color": "#427819"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/mkgp-dev",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": []
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50w-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 57988,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 49907,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21475,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4442,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/freeCodeCamp-Back-End",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 933055,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21468,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 13772,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-top-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 72766,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 56572,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 40604,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/random-challenges",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 9294,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/what-to-do",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 31445,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4888,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 238,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/public-backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 5093,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/forecast-me",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 21600,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4952,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 250,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/webpack-tailwindcss-v4-boilerplate",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 1715,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 276,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 22,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/nova",
+        "stars": 1,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 906536,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Rust",
+            "size": 191092,
+            "color": "#dea584"
+          },
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13145,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 6096,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 354,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/ship-wreck",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 40309,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 292,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 249,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/unofficial-portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 17670,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 350,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 259,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/resume-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 451220,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 11637,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 4351,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1245,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/memoire",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 23752,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4338,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 356,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/shople",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 34565,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4334,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 355,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 54252,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 3023,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2273,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 66209,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 5835,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 2907,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/playtory",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 77400,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 24810,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 20236,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall-membership",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 83010,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 19105,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 17931,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/droppy",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 28612,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 18516,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 18393,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms-api",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 31868,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 194934,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4251,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 108490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4847,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 788,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "Blanxk0/demo-pgmc-monitor",
+        "stars": 1,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 394103,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59319,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 12380,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4299,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/codex-skills",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 8650,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 321494,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1435,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Shell",
+            "size": 369,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/frontend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "TypeScript",
+            "size": 14490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 2838,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 1350,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 796,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/email-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 124671,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 299,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 160,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/github-stats",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 81876,
+            "color": "#f1e05a"
+          }
+        ]
+      }
+    ],
+    "contributedRepos": [
+      {
+        "nameWithOwner": "is-a-dev/register",
+        "stars": 10623,
+        "forks": 23723,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 37827,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "pollinations/pollinations",
+        "stars": 4754,
+        "forks": 871,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 4566349,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1277254,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Python",
+            "size": 890598,
+            "color": "#3572A5"
+          },
+          {
+            "name": "Shell",
+            "size": 254944,
+            "color": "#89e051"
+          },
+          {
+            "name": "CSS",
+            "size": 246909,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 112529,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Rust",
+            "size": 32719,
+            "color": "#dea584"
+          },
+          {
+            "name": "Dockerfile",
+            "size": 6126,
+            "color": "#384d54"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "johnlorena/My-web-portfolio",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 21723,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "TypeScript",
+            "size": 17934,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 1488,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "xthxr/OpenSauce",
+        "stars": 47,
+        "forks": 151,
+        "languages": [
+          {
+            "name": "Java",
+            "size": 323538,
+            "color": "#b07219"
+          },
+          {
+            "name": "C++",
+            "size": 247244,
+            "color": "#f34b7d"
+          },
+          {
+            "name": "Python",
+            "size": 151888,
+            "color": "#3572A5"
+          },
+          {
+            "name": "C",
+            "size": 51837,
+            "color": "#555555"
+          },
+          {
+            "name": "TypeScript",
+            "size": 40841,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 38338,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Dart",
+            "size": 32839,
+            "color": "#00B4AB"
+          },
+          {
+            "name": "Ruby",
+            "size": 27527,
+            "color": "#701516"
+          },
+          {
+            "name": "Go",
+            "size": 23746,
+            "color": "#00ADD8"
+          },
+          {
+            "name": "Haskell",
+            "size": 17746,
+            "color": "#5e5086"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/nova",
+        "stars": 1,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 906536,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Rust",
+            "size": 191092,
+            "color": "#dea584"
+          },
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13145,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 6096,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 354,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/assets",
+        "stars": 0,
+        "forks": 0,
+        "languages": []
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 108490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4847,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 788,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche-renderer",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 22731,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "TypeScript",
+            "size": 14923,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 23,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "smoriginals/folderplus",
+        "stars": 11,
+        "forks": 1,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 22247,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 11840,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "Blanxk0/demo-pgmc-monitor",
+        "stars": 1,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 394103,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59319,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 12380,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4299,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/kaizer-desktop",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 500793,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59205,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 10630,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 7135,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 368,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Shell",
+            "size": 302,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/kaizer-music-player",
+        "stars": 1,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 453976,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 10630,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 7135,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 368,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/payment-scanner",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "Rust",
+            "size": 178589,
+            "color": "#dea584"
+          },
+          {
+            "name": "TypeScript",
+            "size": 173380,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59319,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13182,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 5681,
+            "color": "#663399"
+          },
+          {
+            "name": "Shell",
+            "size": 4284,
+            "color": "#89e051"
+          },
+          {
+            "name": "HTML",
+            "size": 365,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/payment-scanner-proxy",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 8301,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/ephemora",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 197235,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 52295,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 896,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 738,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/ephemora-api",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 281165,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 14119,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 7703,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Shell",
+            "size": 5920,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/text-to-speech",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 150880,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 35234,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 310,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/made-in.app",
+        "stars": 1,
+        "forks": 5,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 39435,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/stream-api",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 127849,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 344,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/stream",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 132126,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 406,
+            "color": "#e34c26"
+          }
+        ]
+      }
+    ],
+    "metricRepos": [
+      {
+        "nameWithOwner": "mkgp-dev/Blog-Portfolio-PHP",
+        "stars": 0,
+        "forks": 0,
+        "views": 10,
+        "languages": [
+          {
+            "name": "PHP",
+            "size": 1135191,
+            "color": "#4F5D95"
+          },
+          {
+            "name": "CSS",
+            "size": 281409,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 132458,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-fcc-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 90102,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 37329,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2694,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50x-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "C",
+            "size": 32294,
+            "color": "#555555"
+          },
+          {
+            "name": "Python",
+            "size": 22109,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 18632,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2256,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/mkgp-dev",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": []
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50w-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 57988,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 49907,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21475,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4442,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/freeCodeCamp-Back-End",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 933055,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21468,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 13772,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-top-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 72766,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 56572,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 40604,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/random-challenges",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 9294,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/what-to-do",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 31445,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4888,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 238,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/public-backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 5093,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/forecast-me",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 21600,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4952,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 250,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/webpack-tailwindcss-v4-boilerplate",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 1715,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 276,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 22,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/nova",
+        "stars": 1,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 906536,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Rust",
+            "size": 191092,
+            "color": "#dea584"
+          },
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13145,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 6096,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 354,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/ship-wreck",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 40309,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 292,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 249,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/unofficial-portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 17670,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 350,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 259,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/resume-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 451220,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 11637,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 4351,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1245,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/memoire",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 23752,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4338,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 356,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/shople",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 34565,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4334,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 355,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 54252,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 3023,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2273,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 66209,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 5835,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 2907,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/playtory",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 77400,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 24810,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 20236,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall-membership",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 83010,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 19105,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 17931,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/droppy",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 28612,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 18516,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 18393,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms-api",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 31868,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 194934,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4251,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 108490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4847,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 788,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/codex-skills",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 8650,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 321494,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1435,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Shell",
+            "size": 369,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/frontend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "TypeScript",
+            "size": 14490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 2838,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 1350,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 796,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/email-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 124671,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 299,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 160,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/github-stats",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 81876,
+            "color": "#f1e05a"
+          }
+        ]
+      }
+    ],
+    "languageRepos": [
+      {
+        "nameWithOwner": "mkgp-dev/Blog-Portfolio-PHP",
+        "stars": 0,
+        "forks": 0,
+        "views": 10,
+        "languages": [
+          {
+            "name": "PHP",
+            "size": 1135191,
+            "color": "#4F5D95"
+          },
+          {
+            "name": "CSS",
+            "size": 281409,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 132458,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-fcc-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 90102,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 37329,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2694,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "me50/mkgp-dev",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 22995,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 18922,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 455,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50x-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "C",
+            "size": 32294,
+            "color": "#555555"
+          },
+          {
+            "name": "Python",
+            "size": 22109,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 18632,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2256,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "code50/188409627",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 945536,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 150332,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 113912,
+            "color": "#e34c26"
+          },
+          {
+            "name": "C",
+            "size": 58966,
+            "color": "#555555"
+          },
+          {
+            "name": "Python",
+            "size": 25106,
+            "color": "#3572A5"
+          },
+          {
+            "name": "Makefile",
+            "size": 1057,
+            "color": "#427819"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/mkgp-dev",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": []
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-cs50w-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 57988,
+            "color": "#3572A5"
+          },
+          {
+            "name": "HTML",
+            "size": 49907,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21475,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4442,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/freeCodeCamp-Back-End",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 933055,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 21468,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 13772,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/personal-top-archive",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 72766,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 56572,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 40604,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/random-challenges",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 9294,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/what-to-do",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 31445,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4888,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 238,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/public-backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 5093,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/forecast-me",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 21600,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4952,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 250,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/webpack-tailwindcss-v4-boilerplate",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 1715,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 276,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 22,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/nova",
+        "stars": 1,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 906536,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Rust",
+            "size": 191092,
+            "color": "#dea584"
+          },
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13145,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 6096,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 354,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/ship-wreck",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 40309,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 292,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 249,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/unofficial-portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 17670,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 350,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 259,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/resume-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 451220,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 11637,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 4351,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1245,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/memoire",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 23752,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4338,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 356,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/shople",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 34565,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4334,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 355,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/portfolio",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 54252,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 3023,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 2273,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 66209,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 5835,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 2907,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/playtory",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 77400,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 24810,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 20236,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/message-wall-membership",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 83010,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 19105,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 17931,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/droppy",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "CSS",
+            "size": 28612,
+            "color": "#663399"
+          },
+          {
+            "name": "EJS",
+            "size": 18516,
+            "color": "#a91e50"
+          },
+          {
+            "name": "TypeScript",
+            "size": 18393,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms-api",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 31868,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/blog-cms",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 194934,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4251,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 616,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 108490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 4847,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 788,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 358,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "Blanxk0/demo-pgmc-monitor",
+        "stars": 1,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 394103,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59319,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 12380,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 4299,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/codex-skills",
+        "stars": 0,
+        "forks": 0,
+        "views": 1,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 8650,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/backend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 321494,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1435,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Shell",
+            "size": 369,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/frontend",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "Python",
+            "size": 86902,
+            "color": "#3572A5"
+          },
+          {
+            "name": "TypeScript",
+            "size": 14490,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 2838,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 1350,
+            "color": "#663399"
+          },
+          {
+            "name": "JavaScript",
+            "size": 796,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/email-makinator",
+        "stars": 0,
+        "forks": 0,
+        "views": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 124671,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 299,
+            "color": "#e34c26"
+          },
+          {
+            "name": "CSS",
+            "size": 160,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "mkgp-dev/github-stats",
+        "stars": 0,
+        "forks": 0,
+        "views": 2,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 81876,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "is-a-dev/register",
+        "stars": 10623,
+        "forks": 23723,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 37827,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "pollinations/pollinations",
+        "stars": 4754,
+        "forks": 871,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 4566349,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 1277254,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Python",
+            "size": 890598,
+            "color": "#3572A5"
+          },
+          {
+            "name": "Shell",
+            "size": 254944,
+            "color": "#89e051"
+          },
+          {
+            "name": "CSS",
+            "size": 246909,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 112529,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Rust",
+            "size": 32719,
+            "color": "#dea584"
+          },
+          {
+            "name": "Dockerfile",
+            "size": 6126,
+            "color": "#384d54"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "johnlorena/My-web-portfolio",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 21723,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "TypeScript",
+            "size": 17934,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 1488,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "xthxr/OpenSauce",
+        "stars": 47,
+        "forks": 151,
+        "languages": [
+          {
+            "name": "Java",
+            "size": 323538,
+            "color": "#b07219"
+          },
+          {
+            "name": "C++",
+            "size": 247244,
+            "color": "#f34b7d"
+          },
+          {
+            "name": "Python",
+            "size": 151888,
+            "color": "#3572A5"
+          },
+          {
+            "name": "C",
+            "size": 51837,
+            "color": "#555555"
+          },
+          {
+            "name": "TypeScript",
+            "size": 40841,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 38338,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "Dart",
+            "size": 32839,
+            "color": "#00B4AB"
+          },
+          {
+            "name": "Ruby",
+            "size": 27527,
+            "color": "#701516"
+          },
+          {
+            "name": "Go",
+            "size": 23746,
+            "color": "#00ADD8"
+          },
+          {
+            "name": "Haskell",
+            "size": 17746,
+            "color": "#5e5086"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/assets",
+        "stars": 0,
+        "forks": 0,
+        "languages": []
+      },
+      {
+        "nameWithOwner": "ternilabs/tyche-renderer",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 22731,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "TypeScript",
+            "size": 14923,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 23,
+            "color": "#663399"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "smoriginals/folderplus",
+        "stars": 11,
+        "forks": 1,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 22247,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 11840,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/kaizer-desktop",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 500793,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59205,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 10630,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 7135,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 368,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Shell",
+            "size": 302,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/kaizer-music-player",
+        "stars": 1,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 453976,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 10630,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 7135,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 368,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/payment-scanner",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "Rust",
+            "size": 178589,
+            "color": "#dea584"
+          },
+          {
+            "name": "TypeScript",
+            "size": 173380,
+            "color": "#3178c6"
+          },
+          {
+            "name": "Python",
+            "size": 59319,
+            "color": "#3572A5"
+          },
+          {
+            "name": "JavaScript",
+            "size": 13182,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "CSS",
+            "size": 5681,
+            "color": "#663399"
+          },
+          {
+            "name": "Shell",
+            "size": 4284,
+            "color": "#89e051"
+          },
+          {
+            "name": "HTML",
+            "size": 365,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/payment-scanner-proxy",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 8301,
+            "color": "#3178c6"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/ephemora",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 197235,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 52295,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 896,
+            "color": "#e34c26"
+          },
+          {
+            "name": "JavaScript",
+            "size": 738,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/ephemora-api",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 281165,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 14119,
+            "color": "#f1e05a"
+          },
+          {
+            "name": "HTML",
+            "size": 7703,
+            "color": "#e34c26"
+          },
+          {
+            "name": "Shell",
+            "size": 5920,
+            "color": "#89e051"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/text-to-speech",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 150880,
+            "color": "#3178c6"
+          },
+          {
+            "name": "CSS",
+            "size": 35234,
+            "color": "#663399"
+          },
+          {
+            "name": "HTML",
+            "size": 310,
+            "color": "#e34c26"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/made-in.app",
+        "stars": 1,
+        "forks": 5,
+        "languages": [
+          {
+            "name": "JavaScript",
+            "size": 39435,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/stream-api",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 127849,
+            "color": "#3178c6"
+          },
+          {
+            "name": "JavaScript",
+            "size": 344,
+            "color": "#f1e05a"
+          }
+        ]
+      },
+      {
+        "nameWithOwner": "ternilabs/stream",
+        "stars": 0,
+        "forks": 0,
+        "languages": [
+          {
+            "name": "TypeScript",
+            "size": 132126,
+            "color": "#3178c6"
+          },
+          {
+            "name": "HTML",
+            "size": 406,
+            "color": "#e34c26"
+          }
+        ]
+      }
+    ],
+    "linesChangedRepos": []
+  }
+}
