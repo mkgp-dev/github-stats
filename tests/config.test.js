@@ -1,16 +1,15 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { loadConfig } from '../src/config.js';
 
-test('loadConfig throws when ACCESS_TOKEN is missing', () => {
-  assert.throws(() => loadConfig({ GITHUB_ACTOR: 'mkgp' }), /ACCESS_TOKEN/);
+test('loadConfig throws when ACCESS_TOKEN is missing', (t) => {
+  t.throws(() => loadConfig({ GITHUB_ACTOR: 'mkgp' }), { message: /ACCESS_TOKEN/ });
 });
 
-test('loadConfig throws when GITHUB_ACTOR is missing', () => {
-  assert.throws(() => loadConfig({ ACCESS_TOKEN: 'abc' }), /GITHUB_ACTOR/);
+test('loadConfig throws when GITHUB_ACTOR is missing', (t) => {
+  t.throws(() => loadConfig({ ACCESS_TOKEN: 'abc' }), { message: /GITHUB_ACTOR/ });
 });
 
-test('loadConfig applies defaults and parses booleans/ints', () => {
+test('loadConfig applies defaults and parses booleans/ints', (t) => {
   const warnings = [];
   const cfg = loadConfig(
     {
@@ -23,62 +22,62 @@ test('loadConfig applies defaults and parses booleans/ints', () => {
     { warn: (msg) => warnings.push(msg) }
   );
 
-  assert.equal(cfg.repoScope, 'owned');
-  assert.equal(cfg.langScope, 'owned_plus_contributed');
-  assert.deepEqual([...cfg.metricOwners], ['mkgp']);
-  assert.equal(cfg.enableLinesChanged, true);
-  assert.equal(cfg.linesChangedMaxRepos, 42);
-  assert.equal(cfg.requestTimeoutMs, 15000);
-  assert.equal(warnings.length, 1);
+  t.is(cfg.repoScope, 'owned');
+  t.is(cfg.langScope, 'owned_plus_contributed');
+  t.deepEqual([...cfg.metricOwners], ['mkgp']);
+  t.is(cfg.enableLinesChanged, true);
+  t.is(cfg.linesChangedMaxRepos, 42);
+  t.is(cfg.requestTimeoutMs, 15000);
+  t.is(warnings.length, 1);
 });
 
-test('loadConfig uses default linesChangedMaxRepos when unset', () => {
+test('loadConfig uses default linesChangedMaxRepos when unset', (t) => {
   const cfg = loadConfig({ ACCESS_TOKEN: 'abc', GITHUB_ACTOR: 'mkgp' });
-  assert.equal(cfg.linesChangedMaxRepos, 30);
-  assert.equal(cfg.requestTimeoutMs, 15000);
-  assert.equal(cfg.maxConcurrency, 10);
-  assert.equal(cfg.maxRetries, 5);
-  assert.deepEqual([...cfg.metricOwners], ['mkgp']);
+  t.is(cfg.linesChangedMaxRepos, 30);
+  t.is(cfg.requestTimeoutMs, 15000);
+  t.is(cfg.maxConcurrency, 10);
+  t.is(cfg.maxRetries, 5);
+  t.deepEqual([...cfg.metricOwners], ['mkgp']);
 });
 
-test('loadConfig parses METRIC_OWNERS allowlist', () => {
+test('loadConfig parses METRIC_OWNERS allowlist', (t) => {
   const cfg = loadConfig({
     ACCESS_TOKEN: 'abc',
     GITHUB_ACTOR: 'mkgp',
     METRIC_OWNERS: ' mkgp, TerniLabs, , mkgp '
   });
 
-  assert.deepEqual([...cfg.metricOwners], ['mkgp', 'ternilabs']);
+  t.deepEqual([...cfg.metricOwners], ['mkgp', 'ternilabs']);
 });
 
-test('loadConfig rejects malformed integer env strings', () => {
-  assert.throws(
+test('loadConfig rejects malformed integer env strings', (t) => {
+  t.throws(
     () =>
       loadConfig({
         ACCESS_TOKEN: 'abc',
         GITHUB_ACTOR: 'mkgp',
         LINES_CHANGED_MAX_REPOS: '12abc'
       }),
-    /LINES_CHANGED_MAX_REPOS/
+    { message: /LINES_CHANGED_MAX_REPOS/ }
   );
 
-  assert.throws(
+  t.throws(
     () =>
       loadConfig({
         ACCESS_TOKEN: 'abc',
         GITHUB_ACTOR: 'mkgp',
         MAX_CONCURRENCY: '1.5'
       }),
-    /MAX_CONCURRENCY/
+    { message: /MAX_CONCURRENCY/ }
   );
 
-  assert.throws(
+  t.throws(
     () =>
       loadConfig({
         ACCESS_TOKEN: 'abc',
         GITHUB_ACTOR: 'mkgp',
         MAX_RETRIES: '1e3'
       }),
-    /MAX_RETRIES/
+    { message: /MAX_RETRIES/ }
   );
 });

@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -7,7 +6,7 @@ import { atomicWrite } from '../src/io/atomicWrite.js';
 import { renderOverview } from '../src/render/overview.js';
 import { renderLanguages } from '../src/render/languages.js';
 
-test('renderers write both files and resolve placeholders', async () => {
+test('renderers write both files and resolve placeholders', async (t) => {
   const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
   const stats = {
     name: 'A&B <MK>',
@@ -28,15 +27,15 @@ test('renderers write both files and resolve placeholders', async () => {
   const overview = await readFile(join(outDir, 'overview.svg'), 'utf8');
   const languages = await readFile(join(outDir, 'languages.svg'), 'utf8');
 
-  assert.equal(overview.includes('{{'), false);
-  assert.equal(languages.includes('{{'), false);
-  assert.match(overview, /A&amp;B &lt;MK&gt;/);
-  assert.match(languages, /A&amp;B/);
-  assert.match(languages, /class="octicon" style="fill:#000000;"/);
-  assert.match(languages, /<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"><\/path>/);
+  t.is(overview.includes('{{'), false);
+  t.is(languages.includes('{{'), false);
+  t.regex(overview, /A&amp;B &lt;MK&gt;/);
+  t.regex(languages, /A&amp;B/);
+  t.regex(languages, /class="octicon" style="fill:#000000;"/);
+  t.regex(languages, /<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"><\/path>/);
 });
 
-test('atomicWrite supports concurrent writes to same target', async () => {
+test('atomicWrite supports concurrent writes to same target', async (t) => {
   const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
   const filePath = join(outDir, 'overview.svg');
 
@@ -47,10 +46,10 @@ test('atomicWrite supports concurrent writes to same target', async () => {
   ]);
 
   const finalContent = await readFile(filePath, 'utf8');
-  assert.ok(['one', 'two', 'three'].includes(finalContent));
+  t.truthy(['one', 'two', 'three'].includes(finalContent));
 });
 
-test('overview renders lines changed as 0 when disabled', async () => {
+test('overview renders lines changed as 0 when disabled', async (t) => {
   const outDir = await mkdtemp(join(tmpdir(), 'gh-stats-'));
   const stats = {
     name: 'MK',
@@ -71,5 +70,5 @@ test('overview renders lines changed as 0 when disabled', async () => {
   await renderOverview({ stats, templatePath: 'templates/overview.svg', outputDir: outDir });
   const overview = await readFile(join(outDir, 'overview.svg'), 'utf8');
 
-  assert.match(overview, /<svg class="octicon" xmlns="http:\/\/www\.w3\.org\/2000\/svg"><\/svg>Merged pull requests<\/td><td>12<\/td>/);
+  t.regex(overview, /<svg class="octicon" xmlns="http:\/\/www\.w3\.org\/2000\/svg"><\/svg>Merged pull requests<\/td><td>12<\/td>/);
 });

@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { mkdtemp, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -23,28 +22,7 @@ function statsFixture() {
     activityMetricLabel: 'Lines of code changed',
     activityMetricValue: 7,
     activityMetricIcon: '<svg class="octicon"></svg>',
-    repoNamesForLines: ['mkgp/owned', 'other/contrib'],
-    sources: {
-      ownedRepos: [
-        {
-          nameWithOwner: 'mkgp/owned',
-          stars: 10,
-          forks: 4,
-          views: 14,
-          languages: [{ name: 'JavaScript', size: 100, color: '#f1e05a' }]
-        }
-      ],
-      contributedRepos: [
-        {
-          nameWithOwner: 'other/contrib',
-          stars: 1,
-          forks: 1,
-          languages: [{ name: 'Go', size: 25, color: '#000000' }]
-        }
-      ],
-      metricRepos: [],
-      languageRepos: []
-    }
+    repoNamesForLines: ['mkgp/owned', 'other/contrib']
   };
 }
 
@@ -65,16 +43,16 @@ function configFixture() {
   };
 }
 
-test('buildResultPayload serializes safe summary, config, and sources', () => {
+test('buildResultPayload serializes safe summary and config, omits sources', (t) => {
   const payload = buildResultPayload({
     stats: statsFixture(),
     config: configFixture(),
     generatedAt: '2026-06-26T00:00:00.000Z'
   });
 
-  assert.equal(payload.version, packageJson.version);
-  assert.equal(payload.generatedAt, '2026-06-26T00:00:00.000Z');
-  assert.deepEqual(payload.config, {
+  t.is(payload.version, packageJson.version);
+  t.is(payload.generatedAt, '2026-06-26T00:00:00.000Z');
+  t.deepEqual(payload.config, {
     repoScope: 'owned_plus_contributed',
     langScope: 'owned_plus_contributed',
     enableLinesChanged: true,
@@ -86,25 +64,15 @@ test('buildResultPayload serializes safe summary, config, and sources', () => {
     excludedRepos: ['mkgp/private'],
     excludedLangs: ['HTML']
   });
-  assert.deepEqual(payload.summary.linesChanged, { additions: 3, deletions: 4, isPartial: true });
-  assert.equal(payload.summary.activityMetricLabel, 'Lines of code changed');
-  assert.equal(payload.summary.activityMetricValue, 7);
-  assert.equal('activityMetricIcon' in payload.summary, false);
-  assert.equal('accessToken' in payload.config, false);
-  assert.deepEqual(payload.sources.linesChangedRepos, ['mkgp/owned', 'other/contrib']);
+  t.deepEqual(payload.summary.linesChanged, { additions: 3, deletions: 4, isPartial: true });
+  t.is(payload.summary.activityMetricLabel, 'Lines of code changed');
+  t.is(payload.summary.activityMetricValue, 7);
+  t.is('activityMetricIcon' in payload.summary, false);
+  t.is('accessToken' in payload.config, false);
+  t.is('sources' in payload, false);
 });
 
-test('buildResultPayload leaves linesChangedRepos empty when lines changed is disabled', () => {
-  const payload = buildResultPayload({
-    stats: statsFixture(),
-    config: { ...configFixture(), enableLinesChanged: false },
-    generatedAt: '2026-06-26T00:00:00.000Z'
-  });
-
-  assert.deepEqual(payload.sources.linesChangedRepos, []);
-});
-
-test('writeResultJson writes formatted JSON to root result path with trailing newline', async () => {
+test('writeResultJson writes formatted JSON to root result path with trailing newline', async (t) => {
   const outDir = await mkdtemp(join(tmpdir(), 'github-stats-result-'));
   const outputPath = join(outDir, 'result.json');
 
@@ -118,10 +86,12 @@ test('writeResultJson writes formatted JSON to root result path with trailing ne
   const content = await readFile(outputPath, 'utf8');
   const parsed = JSON.parse(content);
 
-  await assert.rejects(() => stat(join(outDir, 'generated', 'result.json')), /ENOENT/);
-  assert.equal(content.endsWith('\n'), true);
-  assert.equal(parsed.version, packageJson.version);
-  assert.equal(parsed.generatedAt, '2026-06-26T00:00:00.000Z');
-  assert.equal(content.includes('secret-token'), false);
-  assert.equal(content.includes('<svg'), false);
+  await t.throwsAsync(() => stat(join(outDir, 'generated', 'result.json')), { message: /ENOENT/ });
+  t.is(content.endsWith('\n'), true);
+  t.is(parsed.version, packageJson.version);
+  t.is(parsed.generatedAt, '2026-06-26T00:00:00.000Z');
+  t.is(content.includes('secret-token'), false);
+  t.is(content.includes('<svg'), false);
+  t.is(content.includes('mkgp/owned'), false);
+  t.is(content.includes('other/contrib'), false);
 });

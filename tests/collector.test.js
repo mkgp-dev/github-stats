@@ -1,8 +1,7 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { collectCoreStats } from '../src/stats/collector.js';
 
-test('views always use owned repos even when REPO_SCOPE is owned_plus_contributed', async () => {
+test('views always use owned repos even when REPO_SCOPE is owned_plus_contributed', async (t) => {
   const graphqlCalls = [];
   const restCalls = [];
 
@@ -67,15 +66,79 @@ test('views always use owned repos even when REPO_SCOPE is owned_plus_contribute
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.views, 7);
-  assert.equal(restCalls.length, 1);
-  assert.match(restCalls[0], /mkgp\/owned/);
-  assert.equal(stats.stars, 2);
-  assert.equal(stats.repoCount, 1);
-  assert.equal(stats.forks, 1);
+  t.is(stats.views, 7);
+  t.is(restCalls.length, 1);
+  t.regex(restCalls[0], /mkgp\/owned/);
+  t.is(stats.stars, 2);
+  t.is(stats.repoCount, 1);
+  t.is(stats.forks, 1);
 });
 
-test('empty contributionYears skips contrib-by-year query and keeps contributions at 0', async () => {
+test('a single repo failing the traffic/views request does not abort stats collection', async (t) => {
+  const warnings = [];
+
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'org/no-push-access',
+                  stargazers: { totalCount: 3 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                },
+                {
+                  nameWithOwner: 'mkgp/owned',
+                  stargazers: { totalCount: 2 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: []
+            }
+          }
+        }
+      };
+    },
+    rest: async (path) => {
+      if (path.includes('org/no-push-access')) {
+        throw new Error('GitHub API failed with status 403');
+      }
+      return { views: [{ count: 5 }] };
+    }
+  };
+
+  const stats = await collectCoreStats(
+    client,
+    {
+      githubActor: 'mkgp',
+      metricOwners: new Set(['mkgp']),
+      repoScope: 'owned',
+      langScope: 'owned',
+      excludedRepos: new Set(),
+      excludedLangs: new Set()
+    },
+    { warn: (msg) => warnings.push(msg) }
+  );
+
+  t.is(stats.views, 5);
+  t.is(warnings.length, 1);
+  t.regex(warnings[0], /org\/no-push-access/);
+});
+
+test('empty contributionYears skips contrib-by-year query and keeps contributions at 0', async (t) => {
   const graphqlCalls = [];
 
   const client = {
@@ -115,11 +178,11 @@ test('empty contributionYears skips contrib-by-year query and keeps contribution
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.contributions, 0);
-  assert.equal(graphqlCalls.some((q) => q.includes('contributionsCollection(from:')), false);
+  t.is(stats.contributions, 0);
+  t.is(graphqlCalls.some((q) => q.includes('contributionsCollection(from:')), false);
 });
 
-test('asymmetric pagination skips completed side and still aggregates correctly', async () => {
+test('asymmetric pagination skips completed side and still aggregates correctly', async (t) => {
   const graphqlCalls = [];
   let page = 0;
 
@@ -174,8 +237,8 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
         };
       }
 
-      assert.equal(query.includes('repositoriesContributedTo('), true);
-      assert.equal(query.includes('repositories(first: 100, isFork: false'), false);
+      t.is(query.includes('repositoriesContributedTo('), true);
+      t.is(query.includes('repositories(first: 100, isFork: false'), false);
       return {
         data: {
           viewer: {
@@ -197,7 +260,7 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
       };
     },
     rest: async (path) => {
-      assert.match(path, /mkgp\/owned1/);
+      t.regex(path, /mkgp\/owned1/);
       return { views: [{ count: 8 }] };
     }
   };
@@ -210,18 +273,18 @@ test('asymmetric pagination skips completed side and still aggregates correctly'
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 1);
-  assert.equal(stats.stars, 1);
-  assert.equal(stats.forks, 1);
-  assert.equal(stats.views, 8);
-  assert.equal(stats.contributions, 3);
+  t.is(stats.repoCount, 1);
+  t.is(stats.stars, 1);
+  t.is(stats.forks, 1);
+  t.is(stats.views, 8);
+  t.is(stats.contributions, 3);
 });
 
-test('dedupes overlap between owned and contributed repos for metrics and languages', async () => {
+test('dedupes overlap between owned and contributed repos for metrics and languages', async (t) => {
   const client = {
     graphql: async (query) => {
       if (!query.includes('contributionYears')) {
-        assert.match(query, /owner \{ login \}/);
+        t.regex(query, /owner \{ login \}/);
       }
       if (query.includes('contributionYears')) {
         return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
@@ -283,15 +346,15 @@ test('dedupes overlap between owned and contributed repos for metrics and langua
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 2);
-  assert.equal(stats.stars, 11);
-  assert.equal(stats.forks, 5);
-  assert.equal(stats.languages.JavaScript.size, 100);
-  assert.equal(stats.languages.TypeScript.size, 50);
-  assert.equal(stats.languages.Go.size, 25);
+  t.is(stats.repoCount, 2);
+  t.is(stats.stars, 11);
+  t.is(stats.forks, 5);
+  t.is(stats.languages.JavaScript.size, 100);
+  t.is(stats.languages.TypeScript.size, 50);
+  t.is(stats.languages.Go.size, 25);
 });
 
-test('language fallback/percent contract and deterministic repo name sets', async () => {
+test('language fallback/percent contract and deterministic repo name sets', async (t) => {
   const client = {
     graphql: async (query) => {
       if (query.includes('contributionYears')) {
@@ -355,16 +418,16 @@ test('language fallback/percent contract and deterministic repo name sets', asyn
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.languages.Go.color, '#000000');
+  t.is(stats.languages.Go.color, '#000000');
   const propSum = Object.values(stats.languages).reduce((sum, lang) => sum + lang.prop, 0);
-  assert.ok(propSum > 99.99 && propSum < 100.01);
+  t.truthy(propSum > 99.99 && propSum < 100.01);
 
-  assert.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/b-owned']);
-  assert.deepEqual(stats.contributedRepoNames, ['other/z-contrib']);
-  assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/b-owned', 'other/z-contrib']);
+  t.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/b-owned']);
+  t.deepEqual(stats.contributedRepoNames, ['other/z-contrib']);
+  t.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/b-owned', 'other/z-contrib']);
 });
 
-test('repoNamesForLines dedupes overlaps with deterministic owned-first order', async () => {
+test('repoNamesForLines dedupes overlaps with deterministic owned-first order', async (t) => {
   const client = {
     graphql: async (query) => {
       if (query.includes('contributionYears')) {
@@ -425,120 +488,12 @@ test('repoNamesForLines dedupes overlaps with deterministic owned-first order', 
     excludedLangs: new Set()
   });
 
-  assert.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/shared']);
-  assert.deepEqual(stats.contributedRepoNames, ['mkgp/shared', 'other/z-contrib']);
-  assert.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/shared', 'other/z-contrib']);
+  t.deepEqual(stats.ownedRepoNames, ['mkgp/a-owned', 'mkgp/shared']);
+  t.deepEqual(stats.contributedRepoNames, ['mkgp/shared', 'other/z-contrib']);
+  t.deepEqual(stats.repoNamesForLines, ['mkgp/a-owned', 'mkgp/shared', 'other/z-contrib']);
 });
 
-test('returns source traces for owned, contributed, metric, and language repos', async () => {
-  const client = {
-    graphql: async (query) => {
-      if (query.includes('contributionYears')) {
-        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
-      }
-      if (query.includes('contributionsCollection(from:')) {
-        throw new Error('unexpected per-year query when years are empty');
-      }
-      return {
-        data: {
-          viewer: {
-            login: 'mkgp',
-            name: 'MK',
-            repositories: {
-              pageInfo: { hasNextPage: false, endCursor: null },
-              nodes: [
-                {
-                  nameWithOwner: 'mkgp/shared',
-                  stargazers: { totalCount: 10 },
-                  forkCount: 4,
-                  languages: { edges: [{ size: 100, node: { name: 'JavaScript', color: '#f1e05a' } }] }
-                },
-                {
-                  nameWithOwner: 'mkgp/owned-only',
-                  stargazers: { totalCount: 1 },
-                  forkCount: 1,
-                  languages: { edges: [{ size: 50, node: { name: 'TypeScript', color: '#3178c6' } }] }
-                }
-              ]
-            },
-            repositoriesContributedTo: {
-              pageInfo: { hasNextPage: false, endCursor: null },
-              nodes: [
-                {
-                  nameWithOwner: 'mkgp/shared',
-                  stargazers: { totalCount: 999 },
-                  forkCount: 999,
-                  languages: { edges: [{ size: 999, node: { name: 'JavaScript', color: '#f1e05a' } }] }
-                },
-                {
-                  nameWithOwner: 'other/contrib-only',
-                  stargazers: { totalCount: 2 },
-                  forkCount: 3,
-                  languages: { edges: [{ size: 25, node: { name: 'Go', color: null } }] }
-                }
-              ]
-            }
-          }
-        }
-      };
-    },
-    rest: async (path) => {
-      if (path.includes('mkgp/shared')) return { views: [{ count: 7 }, { count: 5 }] };
-      if (path.includes('mkgp/owned-only')) return { views: [{ count: 2 }] };
-      return { views: [] };
-    }
-  };
-
-  const stats = await collectCoreStats(client, {
-    githubActor: 'mkgp',
-    repoScope: 'owned_plus_contributed',
-    langScope: 'owned_plus_contributed',
-    excludedRepos: new Set(),
-    excludedLangs: new Set()
-  });
-
-  assert.deepEqual(stats.sources.ownedRepos, [
-    {
-      nameWithOwner: 'mkgp/shared',
-      stars: 10,
-      forks: 4,
-      views: 12,
-      languages: [{ name: 'JavaScript', size: 100, color: '#f1e05a' }]
-    },
-    {
-      nameWithOwner: 'mkgp/owned-only',
-      stars: 1,
-      forks: 1,
-      views: 2,
-      languages: [{ name: 'TypeScript', size: 50, color: '#3178c6' }]
-    }
-  ]);
-  assert.deepEqual(stats.sources.contributedRepos, [
-    {
-      nameWithOwner: 'mkgp/shared',
-      stars: 999,
-      forks: 999,
-      languages: [{ name: 'JavaScript', size: 999, color: '#f1e05a' }]
-    },
-    {
-      nameWithOwner: 'other/contrib-only',
-      stars: 2,
-      forks: 3,
-      languages: [{ name: 'Go', size: 25, color: '#000000' }]
-    }
-  ]);
-  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/shared',
-    'mkgp/owned-only'
-  ]);
-  assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/shared',
-    'mkgp/owned-only',
-    'other/contrib-only'
-  ]);
-});
-
-test('repository metrics stay owned-only when repo scope includes contributed repos', async () => {
+test('repository metrics stay owned-only when repo scope includes contributed repos', async (t) => {
   const client = {
     graphql: async (query) => {
       if (query.includes('contributionYears')) {
@@ -595,25 +550,17 @@ test('repository metrics stay owned-only when repo scope includes contributed re
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 1);
-  assert.equal(stats.stars, 2);
-  assert.equal(stats.forks, 1);
-  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/owned-one'
-  ]);
-  assert.deepEqual(stats.sources.languageRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/owned-one',
-    'org/owned-two',
-    'popular/contrib-only'
-  ]);
-  assert.deepEqual(stats.repoNamesForLines, [
+  t.is(stats.repoCount, 1);
+  t.is(stats.stars, 2);
+  t.is(stats.forks, 1);
+  t.deepEqual(stats.repoNamesForLines, [
     'mkgp/owned-one',
     'org/owned-two',
     'popular/contrib-only'
   ]);
 });
 
-test('repository metrics include configured organization owners', async () => {
+test('repository metrics include configured organization owners', async (t) => {
   const client = {
     graphql: async (query) => {
       if (query.includes('contributionYears')) {
@@ -671,16 +618,12 @@ test('repository metrics include configured organization owners', async () => {
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 2);
-  assert.equal(stats.stars, 3);
-  assert.equal(stats.forks, 1);
-  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
-    'mkgp/owned-one',
-    'TerniLabs/kaizer-music-player'
-  ]);
+  t.is(stats.repoCount, 2);
+  t.is(stats.stars, 3);
+  t.is(stats.forks, 1);
 });
 
-test('repository metric owner matching is case-insensitive', async () => {
+test('repository metric owner matching is case-insensitive', async (t) => {
   const client = {
     graphql: async (query) => {
       if (query.includes('contributionYears')) {
@@ -723,9 +666,73 @@ test('repository metric owner matching is case-insensitive', async () => {
     excludedLangs: new Set()
   });
 
-  assert.equal(stats.repoCount, 1);
-  assert.equal(stats.stars, 1);
-  assert.deepEqual(stats.sources.metricRepos.map((repo) => repo.nameWithOwner), [
-    'TerniLabs/kaizer-music-player'
-  ]);
+  t.is(stats.repoCount, 1);
+  t.is(stats.stars, 1);
+});
+
+test('private repos are excluded from owned and contributed sets even when metric owners match', async (t) => {
+  const client = {
+    graphql: async (query) => {
+      if (query.includes('contributionYears')) {
+        return { data: { viewer: { contributionsCollection: { contributionYears: [] } } } };
+      }
+      return {
+        data: {
+          viewer: {
+            login: 'mkgp-dev',
+            name: 'MK',
+            repositories: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'ternilabs/private-repo',
+                  owner: { login: 'ternilabs' },
+                  isPrivate: true,
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                },
+                {
+                  nameWithOwner: 'ternilabs/public-repo',
+                  owner: { login: 'ternilabs' },
+                  isPrivate: false,
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            },
+            repositoriesContributedTo: {
+              pageInfo: { hasNextPage: false, endCursor: null },
+              nodes: [
+                {
+                  nameWithOwner: 'ternilabs/private-contrib',
+                  owner: { login: 'ternilabs' },
+                  isPrivate: true,
+                  stargazers: { totalCount: 1 },
+                  forkCount: 0,
+                  languages: { edges: [] }
+                }
+              ]
+            }
+          }
+        }
+      };
+    },
+    rest: async () => ({ views: [] })
+  };
+
+  const stats = await collectCoreStats(client, {
+    githubActor: 'mkgp-dev',
+    metricOwners: new Set(['mkgp-dev', 'ternilabs']),
+    repoScope: 'owned_plus_contributed',
+    langScope: 'owned_plus_contributed',
+    excludedRepos: new Set(),
+    excludedLangs: new Set()
+  });
+
+  t.is(stats.stars, 1);
+  t.is(stats.repoCount, 1);
+  t.deepEqual(stats.ownedRepoNames, ['ternilabs/public-repo']);
+  t.deepEqual(stats.contributedRepoNames, []);
 });

@@ -8,6 +8,9 @@
   },
   "scripts": {
     "generate": "node src/main.js",
-    "test": "node --test"
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^6.4.1"
   }
 }

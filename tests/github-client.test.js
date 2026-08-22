@@ -1,9 +1,8 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { createGitHubClient } from '../src/github/client.js';
 import { AsyncSemaphore } from '../src/github/semaphore.js';
 
-test('retries 202 then succeeds', async () => {
+test('retries 202 then succeeds', async (t) => {
   let calls = 0;
   const fetchImpl = async () => {
     calls += 1;
@@ -20,11 +19,11 @@ test('retries 202 then succeeds', async () => {
   });
 
   const data = await client.rest('/repos/a/b/traffic/views');
-  assert.deepEqual(data, { ok: true });
-  assert.equal(calls, 3);
+  t.deepEqual(data, { ok: true });
+  t.is(calls, 3);
 });
 
-test('fails fast on 401', async () => {
+test('fails fast on 401', async (t) => {
   const client = createGitHubClient({
     token: 'abc',
     timeoutMs: 1000,
@@ -33,10 +32,10 @@ test('fails fast on 401', async () => {
     fetchImpl: async () => new Response('{}', { status: 401 })
   });
 
-  await assert.rejects(() => client.rest('/repos/a/b/traffic/views'), /401/);
+  await t.throwsAsync(() => client.rest('/repos/a/b/traffic/views'), { message: /401/ });
 });
 
-test('retries transient fetch error then succeeds', async () => {
+test('retries transient fetch error then succeeds', async (t) => {
   let calls = 0;
   const sleepCalls = [];
   const fetchImpl = async () => {
@@ -60,18 +59,18 @@ test('retries transient fetch error then succeeds', async () => {
   });
 
   const data = await client.rest('/repos/a/b/traffic/views');
-  assert.deepEqual(data, { ok: true });
-  assert.equal(calls, 2);
-  assert.deepEqual(sleepCalls, [42]);
+  t.deepEqual(data, { ok: true });
+  t.is(calls, 2);
+  t.deepEqual(sleepCalls, [42]);
 });
 
-test('AsyncSemaphore throws for invalid limit', () => {
-  assert.throws(() => new AsyncSemaphore(0), /positive integer/);
-  assert.throws(() => new AsyncSemaphore(-1), /positive integer/);
-  assert.throws(() => new AsyncSemaphore(1.5), /positive integer/);
+test('AsyncSemaphore throws for invalid limit', (t) => {
+  t.throws(() => new AsyncSemaphore(0), { message: /positive integer/ });
+  t.throws(() => new AsyncSemaphore(-1), { message: /positive integer/ });
+  t.throws(() => new AsyncSemaphore(1.5), { message: /positive integer/ });
 });
 
-test('enforces maxConcurrency for in-flight requests', async () => {
+test('enforces maxConcurrency for in-flight requests', async (t) => {
   let inFlight = 0;
   let maxInFlight = 0;
   let releaseGate;
@@ -106,15 +105,15 @@ test('enforces maxConcurrency for in-flight requests', async () => {
   for (let i = 0; i < 20 && maxInFlight < 2; i += 1) {
     await new Promise((resolve) => setTimeout(resolve, 1));
   }
-  assert.equal(maxInFlight <= 2, true);
+  t.is(maxInFlight <= 2, true);
   releaseGate();
 
   const results = await Promise.all(requests);
-  assert.equal(results.length, 4);
-  assert.equal(maxInFlight, 2);
+  t.is(results.length, 4);
+  t.is(maxInFlight, 2);
 });
 
-test('uses retry-after HTTP-date delay path', async () => {
+test('uses retry-after HTTP-date delay path', async (t) => {
   let calls = 0;
   const sleepCalls = [];
   const now = Date.parse('2026-05-17T00:00:00.000Z');
@@ -149,14 +148,14 @@ test('uses retry-after HTTP-date delay path', async () => {
   });
 
   const data = await client.rest('/repos/a/b/traffic/views');
-  assert.deepEqual(data, { ok: true });
-  assert.equal(calls, 2);
-  assert.equal(sleepCalls.length, 1);
-  assert.equal(Number.isFinite(sleepCalls[0]), true);
-  assert.equal(sleepCalls[0] >= 0, true);
+  t.deepEqual(data, { ok: true });
+  t.is(calls, 2);
+  t.is(sleepCalls.length, 1);
+  t.is(Number.isFinite(sleepCalls[0]), true);
+  t.is(sleepCalls[0] >= 0, true);
 });
 
-test('ignores malformed retry-after numeric and falls back to backoff', async () => {
+test('ignores malformed retry-after numeric and falls back to backoff', async (t) => {
   let calls = 0;
   const sleepCalls = [];
 
@@ -186,12 +185,12 @@ test('ignores malformed retry-after numeric and falls back to backoff', async ()
   });
 
   const data = await client.rest('/repos/a/b/traffic/views');
-  assert.deepEqual(data, { ok: true });
-  assert.equal(calls, 2);
-  assert.deepEqual(sleepCalls, [77]);
+  t.deepEqual(data, { ok: true });
+  t.is(calls, 2);
+  t.deepEqual(sleepCalls, [77]);
 });
 
-test('graphql throws when response body contains errors', async () => {
+test('graphql throws when response body contains errors', async (t) => {
   const client = createGitHubClient({
     token: 'abc',
     timeoutMs: 1000,
@@ -207,12 +206,8 @@ test('graphql throws when response body contains errors', async () => {
       )
   });
 
-  await assert.rejects(
-    () => client.graphql('query { viewer { login } }'),
-    (err) =>
-      err &&
-      err.name === 'GitHubGraphQLError' &&
-      err.status === 200 &&
-      /Something broke/.test(err.message)
-  );
+  const err = await t.throwsAsync(() => client.graphql('query { viewer { login } }'));
+  t.is(err.name, 'GitHubGraphQLError');
+  t.is(err.status, 200);
+  t.regex(err.message, /Something broke/);
 });
