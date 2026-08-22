@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { run } from '../src/main.js';
 
 function baseConfig(overrides = {}) {
@@ -35,7 +34,7 @@ function baseStats(overrides = {}) {
   };
 }
 
-test('run validates viewer login before collecting stats', async () => {
+test('run validates viewer login before collecting stats', async (t) => {
   const calls = [];
   const deps = {
     loadConfig: () => baseConfig(),
@@ -52,10 +51,10 @@ test('run validates viewer login before collecting stats', async () => {
   };
 
   await run(deps);
-  assert.deepEqual(calls.sort(), ['collect', 'languages', 'overview']);
+  t.deepEqual(calls.sort(), ['collect', 'languages', 'overview']);
 });
 
-test('run throws when token login mismatches configured actor', async () => {
+test('run throws when token login mismatches configured actor', async (t) => {
   const deps = {
     loadConfig: () => baseConfig({ githubActor: 'mkgp' }),
     createClient: () => ({
@@ -67,10 +66,10 @@ test('run throws when token login mismatches configured actor', async () => {
     writeResultJson: async () => {}
   };
 
-  await assert.rejects(() => run(deps), /Token login mismatch/);
+  await t.throwsAsync(() => run(deps), { message: /Token login mismatch/ });
 });
 
-test('run rejects before collection when actor/token login mismatches', async () => {
+test('run rejects before collection when actor/token login mismatches', async (t) => {
   let collectCalled = false;
   const deps = {
     loadConfig: () => baseConfig({ githubActor: 'mkgp' }),
@@ -84,11 +83,11 @@ test('run rejects before collection when actor/token login mismatches', async ()
     writeResultJson: async () => {}
   };
 
-  await assert.rejects(() => run(deps), /Token login mismatch/);
-  assert.equal(collectCalled, false);
+  await t.throwsAsync(() => run(deps), { message: /Token login mismatch/ });
+  t.is(collectCalled, false);
 });
 
-test('run treats token login match as case-insensitive', async () => {
+test('run treats token login match as case-insensitive', async (t) => {
   let collected = false;
   const deps = {
     loadConfig: () => baseConfig({ githubActor: 'MKGP' }),
@@ -105,10 +104,10 @@ test('run treats token login match as case-insensitive', async () => {
   };
 
   await run(deps);
-  assert.equal(collected, true);
+  t.is(collected, true);
 });
 
-test('run collects lines changed only when enabled and passes owned_plus_contributed list', async () => {
+test('run collects lines changed only when enabled and passes owned_plus_contributed list', async (t) => {
   const calls = [];
   const deps = {
     loadConfig: () => baseConfig({ enableLinesChanged: true, repoScope: 'owned_plus_contributed' }),
@@ -136,8 +135,8 @@ test('run collects lines changed only when enabled and passes owned_plus_contrib
 
   await run(deps);
 
-  assert.deepEqual(calls[0], ['lines', ['mkgp/owned', 'other/contrib'], 'mkgp']);
-  assert.deepEqual(calls[1], [
+  t.deepEqual(calls[0], ['lines', ['mkgp/owned', 'other/contrib'], 'mkgp']);
+  t.deepEqual(calls[1], [
     'overview',
     { additions: 5, deletions: 2, isPartial: false },
     'Lines of code changed',
@@ -145,7 +144,7 @@ test('run collects lines changed only when enabled and passes owned_plus_contrib
   ]);
 });
 
-test('run sets zero lines changed when disabled', async () => {
+test('run sets zero lines changed when disabled', async (t) => {
   let capturedLinesChanged;
   let capturedMetricLabel;
   let capturedMetricValue;
@@ -175,28 +174,20 @@ test('run sets zero lines changed when disabled', async () => {
   };
 
   await run(deps);
-  assert.deepEqual(capturedLinesChanged, { additions: 0, deletions: 0, isPartial: false });
-  assert.equal(capturedMetricLabel, 'Merged pull requests');
-  assert.equal(capturedMetricValue, 42);
-  assert.match(capturedMetricIcon, /class="octicon"/);
+  t.deepEqual(capturedLinesChanged, { additions: 0, deletions: 0, isPartial: false });
+  t.is(capturedMetricLabel, 'Merged pull requests');
+  t.is(capturedMetricValue, 42);
+  t.regex(capturedMetricIcon, /class="octicon"/);
 });
 
-test('run writes result json after resolving final stats', async () => {
+test('run writes result json after resolving final stats', async (t) => {
   let captured;
   const deps = {
     loadConfig: () => baseConfig({ enableLinesChanged: true, repoScope: 'owned_plus_contributed' }),
     createClient: () => ({
       graphql: async () => ({ data: { viewer: { login: 'mkgp' } } })
     }),
-    collectCoreStats: async () =>
-      baseStats({
-        sources: {
-          ownedRepos: [],
-          contributedRepos: [],
-          metricRepos: [],
-          languageRepos: []
-        }
-      }),
+    collectCoreStats: async () => baseStats(),
     collectLinesChanged: async () => ({ additions: 5, deletions: 2, isPartial: false }),
     renderOverview: async () => {},
     renderLanguages: async () => {},
@@ -207,14 +198,14 @@ test('run writes result json after resolving final stats', async () => {
 
   await run(deps);
 
-  assert.equal(captured.config.enableLinesChanged, true);
-  assert.equal(captured.outputPath, 'result.json');
-  assert.deepEqual(captured.stats.linesChanged, { additions: 5, deletions: 2, isPartial: false });
-  assert.equal(captured.stats.activityMetricLabel, 'Lines of code changed');
-  assert.equal(captured.stats.activityMetricValue, 7);
+  t.is(captured.config.enableLinesChanged, true);
+  t.is(captured.outputPath, 'result.json');
+  t.deepEqual(captured.stats.linesChanged, { additions: 5, deletions: 2, isPartial: false });
+  t.is(captured.stats.activityMetricLabel, 'Lines of code changed');
+  t.is(captured.stats.activityMetricValue, 7);
 });
 
-test('run keeps svg outputs under generated while result json writes at root', async () => {
+test('run keeps svg outputs under generated while result json writes at root', async (t) => {
   const calls = [];
   const deps = {
     loadConfig: () => baseConfig({ enableLinesChanged: false }),
@@ -237,7 +228,7 @@ test('run keeps svg outputs under generated while result json writes at root', a
 
   await run(deps);
 
-  assert.deepEqual(calls.sort(), [
+  t.deepEqual(calls.sort(), [
     ['languages', 'generated'],
     ['overview', 'generated'],
     ['result', 'result.json']

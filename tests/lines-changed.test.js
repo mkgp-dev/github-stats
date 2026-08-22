@@ -1,8 +1,7 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { collectLinesChanged } from '../src/stats/linesChanged.js';
 
-test('sums additions/deletions for matching username', async () => {
+test('sums additions/deletions for matching username', async (t) => {
   const client = {
     rest: async () => ([
       {
@@ -28,12 +27,12 @@ test('sums additions/deletions for matching username', async () => {
     }
   });
 
-  assert.equal(result.isPartial, false);
-  assert.equal(result.additions, 8);
-  assert.equal(result.deletions, 3);
+  t.is(result.isPartial, false);
+  t.is(result.additions, 8);
+  t.is(result.deletions, 3);
 });
 
-test('retries once then succeeds', async () => {
+test('retries once then succeeds', async (t) => {
   let calls = 0;
   const client = {
     rest: async () => {
@@ -56,13 +55,13 @@ test('retries once then succeeds', async () => {
     sleep: async () => {}
   });
 
-  assert.equal(result.isPartial, false);
-  assert.equal(result.additions, 4);
-  assert.equal(result.deletions, 2);
-  assert.equal(calls, 2);
+  t.is(result.isPartial, false);
+  t.is(result.additions, 4);
+  t.is(result.deletions, 2);
+  t.is(calls, 2);
 });
 
-test('skip path emits warning after retries', async () => {
+test('skip path emits warning after retries', async (t) => {
   const warnings = [];
   const logger = { warn: (msg) => warnings.push(msg) };
   const client = {
@@ -85,14 +84,14 @@ test('skip path emits warning after retries', async () => {
     sleep: async () => {}
   });
 
-  assert.equal(result.isPartial, true);
-  assert.equal(result.additions, 0);
-  assert.equal(result.deletions, 0);
-  assert.equal(warnings.length, 1);
-  assert.match(warnings[0], /lines_changed skipped a\/x after retries/);
+  t.is(result.isPartial, true);
+  t.is(result.additions, 0);
+  t.is(result.deletions, 0);
+  t.is(warnings.length, 1);
+  t.regex(warnings[0], /lines_changed skipped a\/x after retries/);
 });
 
-test('stops at module budget and marks partial', async () => {
+test('stops at module budget and marks partial', async (t) => {
   let calls = 0;
   const client = {
     rest: async () => {
@@ -114,13 +113,13 @@ test('stops at module budget and marks partial', async () => {
     now: () => 1000
   });
 
-  assert.equal(result.isPartial, true);
-  assert.equal(result.additions, 0);
-  assert.equal(result.deletions, 0);
-  assert.equal(calls, 0);
+  t.is(result.isPartial, true);
+  t.is(result.additions, 0);
+  t.is(result.deletions, 0);
+  t.is(calls, 0);
 });
 
-test('marks partial when contributor stats remains pending/non-array', async () => {
+test('marks partial when contributor stats remains pending/non-array', async (t) => {
   let calls = 0;
   const client = {
     rest: async () => {
@@ -142,8 +141,8 @@ test('marks partial when contributor stats remains pending/non-array', async () 
     sleep: async () => {}
   });
 
-  assert.equal(result.isPartial, true);
-  assert.equal(result.additions, 0);
-  assert.equal(result.deletions, 0);
-  assert.equal(calls, 1);
+  t.is(result.isPartial, true);
+  t.is(result.additions, 0);
+  t.is(result.deletions, 0);
+  t.is(calls, 1);
 });

@@ -1,45 +1,45 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import test from 'ava';
 import { readFile } from 'node:fs/promises';
 
-test('workflow runs node generator instead of python', async () => {
+test('workflow runs node generator instead of python', async (t) => {
   const yaml = await readFile('.github/workflows/main.yml', 'utf8');
 
-  assert.match(yaml, /actions\/setup-node/);
-  assert.match(yaml, /node-version:\s*["']22["']/);
-  assert.doesNotMatch(yaml, /node-version:\s*["']20["']/);
-  assert.match(yaml, /npm ci/);
-  assert.match(yaml, /npm run generate/);
+  t.regex(yaml, /actions\/setup-node/);
+  t.regex(yaml, /node-version:\s*["']22["']/);
+  t.notRegex(yaml, /node-version:\s*["']20["']/);
+  t.regex(yaml, /npm ci/);
+  t.regex(yaml, /npm test/);
+  t.regex(yaml, /npm run generate/);
 
-  assert.doesNotMatch(yaml, /setup-python/);
-  assert.doesNotMatch(yaml, /pip install/);
-  assert.doesNotMatch(yaml, /generate_images\.py/);
+  t.notRegex(yaml, /setup-python/);
+  t.notRegex(yaml, /pip install/);
+  t.notRegex(yaml, /generate_images\.py/);
 
-  assert.match(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*secrets\.GH_STATS_ACTOR\s*\}\}/);
-  assert.match(yaml, /METRIC_OWNERS:\s*\$\{\{\s*secrets\.METRIC_OWNERS\s*\}\}/);
-  assert.doesNotMatch(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*github\.actor\s*\}\}/);
+  t.regex(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*secrets\.GH_STATS_ACTOR\s*\}\}/);
+  t.regex(yaml, /METRIC_OWNERS:\s*\$\{\{\s*secrets\.METRIC_OWNERS\s*\}\}/);
+  t.notRegex(yaml, /GITHUB_ACTOR:\s*\$\{\{\s*github\.actor\s*\}\}/);
 
-  assert.match(yaml, /cp -R "\$RUNNER_TEMP\/github-stats-output\/generated" "\.\/generated"/);
-  assert.match(
+  t.regex(yaml, /cp -R "\$RUNNER_TEMP\/github-stats-output\/generated" "\.\/generated"/);
+  t.regex(
     yaml,
     /fi\n\n        rm -rf generated result\.json\n        cp -R "\$RUNNER_TEMP\/github-stats-output\/generated" "\.\/generated"/
   );
-  assert.match(yaml, /cp "\$RUNNER_TEMP\/github-stats-output\/result\.json" "result\.json"/);
-  assert.match(yaml, /if \[ ! -f README\.md \]; then/);
-  assert.match(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/generated\/overview\.svg/);
-  assert.match(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/generated\/languages\.svg/);
-  assert.match(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/result\.json/);
-  assert.match(yaml, /\\`\\`\\`md/);
-  assert.match(yaml, /!\[GitHub Stats Overview\]/);
-  assert.match(yaml, /!\[Most Used Languages\]/);
+  t.regex(yaml, /cp "\$RUNNER_TEMP\/github-stats-output\/result\.json" "result\.json"/);
+  t.regex(yaml, /if \[ ! -f README\.md \]; then/);
+  t.regex(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/generated\/overview\.svg/);
+  t.regex(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/generated\/languages\.svg/);
+  t.regex(yaml, /https:\/\/raw\.githubusercontent\.com\/\$\{GITHUB_REPOSITORY\}\/output\/result\.json/);
+  t.regex(yaml, /\\`\\`\\`md/);
+  t.regex(yaml, /!\[GitHub Stats Overview\]/);
+  t.regex(yaml, /!\[Most Used Languages\]/);
 
   const lines = yaml.split('\n');
   const readmeStart = lines.findIndex((line) => line.includes('cat > README.md <<EOF'));
   const readmeEnd = lines.findIndex((line, index) => index > readmeStart && line.trim() === 'EOF');
 
-  assert.notEqual(readmeStart, -1);
-  assert.notEqual(readmeEnd, -1);
+  t.not(readmeStart, -1);
+  t.not(readmeEnd, -1);
   for (const line of lines.slice(readmeStart + 1, readmeEnd + 1)) {
-    if (line !== '') assert.match(line, /^        /);
+    if (line !== '') t.regex(line, /^        /);
   }
 });

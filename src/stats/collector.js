@@ -8,11 +8,12 @@ function repoQuery({
   const contrib = contribCursor ? `"${contribCursor}"` : 'null';
   const ownedBlock = includeOwned
     ? `
-    repositories(first: 100, isFork: false, after: ${owned}) {
+    repositories(first: 100, isFork: false, privacy: PUBLIC, ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER], after: ${owned}) {
       pageInfo { hasNextPage endCursor }
       nodes {
         nameWithOwner
         owner { login }
+        isPrivate
         stargazers { totalCount }
         forkCount
         languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
@@ -33,6 +34,7 @@ function repoQuery({
       nodes {
         nameWithOwner
         owner { login }
+        isPrivate
         stargazers { totalCount }
         forkCount
         languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
@@ -121,28 +123,13 @@ function isMetricOwner(repo, config) {
   return metricOwners.has(ownerLogin(repo));
 }
 
-function traceLanguages(repo) {
-  return (repo.languages?.edges ?? []).map((edge) => ({
-    name: edge?.node?.name ?? 'Other',
-    size: edge?.size ?? 0,
-    color: edge?.node?.color ?? '#000000'
-  }));
+function isEligibleRepo(repo, config) {
+  return !config.excludedRepos.has(repo.nameWithOwner) && !repo.isPrivate;
 }
 
-function traceRepo(repo, extra = {}) {
-  return {
-    nameWithOwner: repo.nameWithOwner,
-    stars: repo.stargazers?.totalCount ?? 0,
-    forks: repo.forkCount ?? 0,
-    ...extra,
-    languages: traceLanguages(repo)
-  };
-}
-
-export async function collectCoreStats(client, config) {
+export async function collectCoreStats(client, config, logger = console) {
   const ownedRepos = new Map();
   const contributedRepos = new Map();
-  const ownedRepoViews = new Map();
   let ownedCursor = null;
   let contribCursor = null;
   let hasMoreOwned = true;
@@ -165,7 +152,7 @@ export async function collectCoreStats(client, config) {
 
     if (hasMoreOwned) {
       for (const repo of viewer.repositories?.nodes ?? []) {
-        if (!config.excludedRepos.has(repo.nameWithOwner)) {
+        if (isEligibleRepo(repo, config)) {
           ownedRepos.set(repo.nameWithOwner, repo);
         }
       }
@@ -176,7 +163,7 @@ export async function collectCoreStats(client, config) {
 
     if (hasMoreContrib) {
       for (const repo of viewer.repositoriesContributedTo?.nodes ?? []) {
-        if (!config.excludedRepos.has(repo.nameWithOwner)) {
+        if (isEligibleRepo(repo, config)) {
           contributedRepos.set(repo.nameWithOwner, repo);
         }
       }
@@ -209,10 +196,12 @@ export async function collectCoreStats(client, config) {
 
   let views = 0;
   for (const repo of ownedRepos.values()) {
-    const data = await client.rest(`/repos/${repo.nameWithOwner}/traffic/views`);
-    const repoViews = (data.views ?? []).reduce((sum, row) => sum + (row.count ?? 0), 0);
-    ownedRepoViews.set(repo.nameWithOwner, repoViews);
-    views += repoViews;
+    try {
+      const data = await client.rest(`/repos/${repo.nameWithOwner}/traffic/views`);
+      views += (data.views ?? []).reduce((sum, row) => sum + (row.count ?? 0), 0);
+    } catch (err) {
+      logger.warn(`[WARN] stats skipped views for ${repo.nameWithOwner}: ${err.message}`);
+    }
   }
 
   const years =
@@ -241,28 +230,6 @@ export async function collectCoreStats(client, config) {
     repoNamesForLines:
       config.repoScope === 'owned_plus_contributed'
         ? mergeUniqueNames(ownedRepos.keys(), contributedRepos.keys())
-        : [...ownedRepos.keys()],
-    sources: {
-      ownedRepos: [...ownedRepos.values()].map((repo) =>
-        traceRepo(repo, { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 })
-      ),
-      contributedRepos: [...contributedRepos.values()].map((repo) => traceRepo(repo)),
-      metricRepos: metricRepos.map((repo) =>
-        traceRepo(
-          repo,
-          ownedRepoViews.has(repo.nameWithOwner)
-            ? { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 }
-            : {}
-        )
-      ),
-      languageRepos: langRepos.map((repo) =>
-        traceRepo(
-          repo,
-          ownedRepoViews.has(repo.nameWithOwner)
-            ? { views: ownedRepoViews.get(repo.nameWithOwner) ?? 0 }
-            : {}
-        )
-      )
-    }
+        : [...ownedRepos.keys()]
   };
 }

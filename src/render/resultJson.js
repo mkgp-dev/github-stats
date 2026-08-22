@@ -38,25 +38,6 @@ function serializeSummary(stats) {
   };
 }
 
-function serializeSources(stats, config) {
-  const sources = stats.sources ?? {
-    ownedRepos: [],
-    contributedRepos: [],
-    metricRepos: [],
-    languageRepos: []
-  };
-
-  return {
-    ownedRepos: sources.ownedRepos ?? [],
-    contributedRepos: sources.contributedRepos ?? [],
-    metricRepos: sources.metricRepos ?? [],
-    languageRepos: sources.languageRepos ?? [],
-    linesChangedRepos: config.enableLinesChanged
-      ? (stats.repoNamesForLines ?? []).slice(0, config.linesChangedMaxRepos)
-      : []
-  };
-}
-
 export function buildResultPayload({
   stats,
   config,
@@ -67,8 +48,7 @@ export function buildResultPayload({
     version,
     generatedAt,
     config: serializeConfig(config),
-    summary: serializeSummary(stats),
-    sources: serializeSources(stats, config)
+    summary: serializeSummary(stats)
   };
 }
 
