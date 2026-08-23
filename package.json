@@ -11,6 +11,6 @@
     "test": "ava"
   },
   "devDependencies": {
-    "ava": "^6.4.1"
+    "ava": "^8.0.1"
   }
 }
