@@ -1,0 +1,145 @@
+{
+  "version": "2.1.3",
+  "generatedAt": "2026-10-03T02:41:20.180Z",
+  "config": {
+    "repoScope": "owned",
+    "langScope": "owned_plus_contributed",
+    "enableLinesChanged": false,
+    "linesChangedMaxRepos": 30,
+    "linesChangedTimeoutMs": 20000,
+    "linesChangedModuleBudgetMs": 120000,
+    "linesChangedMaxRetries": 5,
+    "metricOwners": [
+      "mkgp-dev",
+      "ternilabs"
+    ],
+    "excludedRepos": [],
+    "excludedLangs": []
+  },
+  "summary": {
+    "name": "Mark Pelayo",
+    "login": "mkgp-dev",
+    "repoCount": 33,
+    "stars": 3,
+    "forks": 7,
+    "contributions": 2452,
+    "views": 24,
+    "languages": {
+      "PHP": {
+        "size": 1135191,
+        "occurrences": 1,
+        "color": "#4F5D95",
+        "prop": 5.476705604235893
+      },
+      "CSS": {
+        "size": 1911016,
+        "occurrences": 27,
+        "color": "#663399",
+        "prop": 9.21965734135001
+      },
+      "JavaScript": {
+        "size": 1965520,
+        "occurrences": 27,
+        "color": "#f1e05a",
+        "prop": 9.48261076703192
+      },
+      "HTML": {
+        "size": 282101,
+        "occurrences": 21,
+        "color": "#e34c26",
+        "prop": 1.3609904656225689
+      },
+      "C": {
+        "size": 84131,
+        "occurrences": 2,
+        "color": "#555555",
+        "prop": 0.4058882771180972
+      },
+      "Python": {
+        "size": 1734043,
+        "occurrences": 4,
+        "color": "#3572A5",
+        "prop": 8.365854746986209
+      },
+      "TypeScript": {
+        "size": 12716231,
+        "occurrences": 19,
+        "color": "#3178c6",
+        "prop": 61.34919461346874
+      },
+      "EJS": {
+        "size": 68266,
+        "occurrences": 4,
+        "color": "#a91e50",
+        "prop": 0.3293479113019461
+      },
+      "Shell": {
+        "size": 112709,
+        "occurrences": 1,
+        "color": "#89e051",
+        "prop": 0.5437622496547482
+      },
+      "Rust": {
+        "size": 32719,
+        "occurrences": 1,
+        "color": "#dea584",
+        "prop": 0.15785214176732743
+      },
+      "Dockerfile": {
+        "size": 9325,
+        "occurrences": 1,
+        "color": "#384d54",
+        "prop": 0.044988270484438035
+      },
+      "Tape": {
+        "size": 3733,
+        "occurrences": 1,
+        "color": "#000000",
+        "prop": 0.018009781632000774
+      },
+      "Java": {
+        "size": 323538,
+        "occurrences": 1,
+        "color": "#b07219",
+        "prop": 1.5609024188733633
+      },
+      "C++": {
+        "size": 247244,
+        "occurrences": 1,
+        "color": "#f34b7d",
+        "prop": 1.1928235868798283
+      },
+      "Dart": {
+        "size": 32839,
+        "occurrences": 1,
+        "color": "#00B4AB",
+        "prop": 0.15843107929634967
+      },
+      "Ruby": {
+        "size": 27527,
+        "occurrences": 1,
+        "color": "#701516",
+        "prop": 0.1328034446782977
+      },
+      "Go": {
+        "size": 23746,
+        "occurrences": 1,
+        "color": "#00ADD8",
+        "prop": 0.114562088034688
+      },
+      "Haskell": {
+        "size": 17746,
+        "occurrences": 1,
+        "color": "#5e5086",
+        "prop": 0.08561521158357506
+      }
+    },
+    "linesChanged": {
+      "additions": 0,
+      "deletions": 0,
+      "isPartial": false
+    },
+    "activityMetricLabel": "Merged pull requests",
+    "activityMetricValue": 114
+  }
+}
