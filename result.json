@@ -1,0 +1,115 @@
+{
+  "version": "2.1.3",
+  "generatedAt": "2026-11-07T03:33:39.438Z",
+  "config": {
+    "repoScope": "owned",
+    "langScope": "owned_plus_contributed",
+    "enableLinesChanged": false,
+    "linesChangedMaxRepos": 30,
+    "linesChangedTimeoutMs": 20000,
+    "linesChangedModuleBudgetMs": 120000,
+    "linesChangedMaxRetries": 5,
+    "metricOwners": [
+      "mkgp-dev",
+      "ternilabs"
+    ],
+    "excludedRepos": [],
+    "excludedLangs": []
+  },
+  "summary": {
+    "name": "Mark Pelayo",
+    "login": "mkgp-dev",
+    "repoCount": 33,
+    "stars": 3,
+    "forks": 8,
+    "contributions": 2509,
+    "views": 34,
+    "languages": {
+      "PHP": {
+        "size": 1135191,
+        "occurrences": 1,
+        "color": "#4F5D95",
+        "prop": 4.917422215895867
+      },
+      "CSS": {
+        "size": 1757403,
+        "occurrences": 27,
+        "color": "#663399",
+        "prop": 7.612721167171026
+      },
+      "JavaScript": {
+        "size": 2395926,
+        "occurrences": 26,
+        "color": "#f1e05a",
+        "prop": 10.378676134714352
+      },
+      "HTML": {
+        "size": 247687,
+        "occurrences": 21,
+        "color": "#e34c26",
+        "prop": 1.072930948526371
+      },
+      "C": {
+        "size": 32294,
+        "occurrences": 1,
+        "color": "#555555",
+        "prop": 0.13989120160408347
+      },
+      "Python": {
+        "size": 1713564,
+        "occurrences": 3,
+        "color": "#3572A5",
+        "prop": 7.422819315832653
+      },
+      "TypeScript": {
+        "size": 15543822,
+        "occurrences": 18,
+        "color": "#3178c6",
+        "prop": 67.33275336285341
+      },
+      "EJS": {
+        "size": 68266,
+        "occurrences": 4,
+        "color": "#a91e50",
+        "prop": 0.295714769576527
+      },
+      "Shell": {
+        "size": 124746,
+        "occurrences": 1,
+        "color": "#89e051",
+        "prop": 0.5403749252276893
+      },
+      "Rust": {
+        "size": 32719,
+        "occurrences": 1,
+        "color": "#dea584",
+        "prop": 0.14173221729373897
+      },
+      "Dockerfile": {
+        "size": 15140,
+        "occurrences": 1,
+        "color": "#384d54",
+        "prop": 0.06558347656796382
+      },
+      "Luau": {
+        "size": 14592,
+        "occurrences": 1,
+        "color": "#00A2FF",
+        "prop": 0.06320964927871388
+      },
+      "Tape": {
+        "size": 3733,
+        "occurrences": 1,
+        "color": "#000000",
+        "prop": 0.016170615457609575
+      }
+    },
+    "linesChanged": {
+      "additions": 0,
+      "deletions": 0,
+      "isPartial": false
+    },
+    "activityMetricLabel": "Merged pull requests",
+    "activityMetricValue": 114
+  }
+}
